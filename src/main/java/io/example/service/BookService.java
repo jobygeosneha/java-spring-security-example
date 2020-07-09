@@ -1,5 +1,6 @@
 package io.example.service;
 
+import io.example.domain.exception.NotFoundException;
 import io.example.domain.model.Book;
 import io.example.repository.BookRepo;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,10 @@ public class BookService {
 
     public Book save(Book book) {
         return bookRepo.save(book);
+    }
+
+    public Book getBook(String id) {
+        return bookRepo.findById(id).orElseThrow(() -> new NotFoundException(Book.class, id));
     }
 
 }
