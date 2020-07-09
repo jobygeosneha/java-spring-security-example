@@ -9,8 +9,6 @@ import java.util.List;
 @Data
 public class EditBookRequest {
 
-    private String id;
-
     @NotNull
     private String title;
     private String about;

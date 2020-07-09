@@ -1,10 +1,11 @@
 package io.example.domain.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,9 +17,9 @@ public class Author implements Serializable {
     @Id
     private String id;
 
-    @DBRef
+    @CreatedBy
     private String creatorId;
-    @DBRef
+    @LastModifiedBy
     private String modifierId;
 
     @CreatedDate
