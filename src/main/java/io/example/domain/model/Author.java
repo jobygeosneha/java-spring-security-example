@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -30,8 +31,8 @@ public class Author implements Serializable {
     private String fullName;
     private String about;
     private String nationality;
-    private Set<String> genres;
+    private Set<String> genres = new HashSet<>();
 
-    private Set<String> bookIds;
+    private Set<String> bookIds = new HashSet<>();
 
 }

@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -31,13 +32,13 @@ public class Book implements Serializable {
     private String title;
     private String about;
     private String language;
-    private Set<String> genres;
+    private Set<String> genres = new HashSet<>();
     private String isbn13;
     private String isbn10;
     private String publisher;
     private LocalDate publishDate;
     private int hardcover;
 
-    private Set<String> authorIds;
+    private Set<String> authorIds = new HashSet<>();
 
 }
