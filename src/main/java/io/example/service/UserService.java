@@ -1,12 +1,40 @@
 package io.example.service;
 
 import io.example.domain.model.User;
+import io.example.repository.UserRepo;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-public interface UserService extends UserDetailsService {
+import static java.lang.String.format;
 
-    User save(User user);
+@Service
+public class UserService implements UserDetailsService {
 
-    boolean usernameExists(String username);
+    private final UserRepo userRepo;
+
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    public User save(User user) {
+        return userRepo.save(user);
+    }
+
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepo
+                .findByUsername(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(format("User with username - %s, not found", username))
+                );
+
+        return user;
+    }
+
+    public boolean usernameExists(String username) {
+        return userRepo.findByUsername(username).isPresent();
+    }
+
 
 }
