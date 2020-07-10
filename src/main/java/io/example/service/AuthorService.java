@@ -3,6 +3,7 @@ package io.example.service;
 import io.example.domain.exception.NotFoundException;
 import io.example.domain.model.Author;
 import io.example.repository.AuthorRepo;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,11 +26,11 @@ public class AuthorService {
         return authorRepo.saveAll(authors);
     }
 
-    public Author getAuthor(String id) {
+    public Author getAuthor(ObjectId id) {
         return authorRepo.findById(id).orElseThrow(() -> new NotFoundException(Author.class, id));
     }
 
-    public List<Author> getAuthors(Iterable<String> ids) {
+    public List<Author> getAuthors(Iterable<ObjectId> ids) {
         List<Author> authors = new ArrayList<>();
         authorRepo.findAllById(ids).forEach(author -> authors.add(author));
         return authors;

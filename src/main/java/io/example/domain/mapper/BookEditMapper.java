@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ObjectIdMapper.class)
 public interface BookEditMapper {
 
     Book create(EditBookRequest request);

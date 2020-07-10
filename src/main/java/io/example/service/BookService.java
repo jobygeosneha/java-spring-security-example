@@ -4,6 +4,7 @@ import io.example.domain.exception.NotFoundException;
 import io.example.domain.model.Author;
 import io.example.domain.model.Book;
 import io.example.repository.BookRepo;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +41,13 @@ public class BookService {
     }
 
     private void updateAuthors(Book book) {
-        final String bookId = book.getId();
+        final ObjectId bookId = book.getId();
         List<Author> authors = authorService.getAuthors(book.getAuthorIds());
         authors.forEach(author -> author.getBookIds().add(bookId));
         authorService.saveAll(authors);
     }
 
-    public Book getBook(String id) {
+    public Book getBook(ObjectId id) {
         return bookRepo.findById(id).orElseThrow(() -> new NotFoundException(Book.class, id));
     }
 

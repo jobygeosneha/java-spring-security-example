@@ -3,6 +3,7 @@ package io.example.service;
 import io.example.domain.exception.NotFoundException;
 import io.example.domain.model.User;
 import io.example.repository.UserRepo;
+import org.bson.types.ObjectId;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,7 +38,7 @@ public class UserService implements UserDetailsService {
         return userRepo.findByUsername(username).isPresent();
     }
 
-    public User getUser(String id) {
+    public User getUser(ObjectId id) {
         return userRepo.findById(id).orElseThrow(() -> new NotFoundException(User.class, id));
     }
 

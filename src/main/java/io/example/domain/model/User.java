@@ -1,6 +1,7 @@
 package io.example.domain.model;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,7 +18,7 @@ import java.util.Collection;
 public class User implements UserDetails, Serializable {
 
     @Id
-    private String id;
+    private ObjectId id;
 
     @CreatedDate
     private LocalDateTime createdAt;

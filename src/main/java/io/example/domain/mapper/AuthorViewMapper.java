@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ObjectIdMapper.class)
 public abstract class AuthorViewMapper {
 
     private UserViewMapper userViewMapper;

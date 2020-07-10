@@ -1,6 +1,7 @@
 package io.example.domain.model;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -16,12 +17,12 @@ import java.util.Set;
 public class Author implements Serializable {
 
     @Id
-    private String id;
+    private ObjectId id;
 
     @CreatedBy
-    private String creatorId;
+    private ObjectId creatorId;
     @LastModifiedBy
-    private String modifierId;
+    private ObjectId modifierId;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -33,6 +34,6 @@ public class Author implements Serializable {
     private String nationality;
     private Set<String> genres = new HashSet<>();
 
-    private Set<String> bookIds = new HashSet<>();
+    private Set<ObjectId> bookIds = new HashSet<>();
 
 }

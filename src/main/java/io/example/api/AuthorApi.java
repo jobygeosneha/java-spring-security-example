@@ -7,6 +7,7 @@ import io.example.domain.mapper.AuthorViewMapper;
 import io.example.domain.model.Author;
 import io.example.service.AuthorService;
 import io.swagger.annotations.Api;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,7 @@ public class AuthorApi {
 
     @PutMapping("{id}")
     public AuthorView editAuthor(@PathVariable String id, @RequestBody EditAuthorRequest request) {
-        Author author = authorService.getAuthor(id);
+        Author author = authorService.getAuthor(new ObjectId(id));
         authorEditMapper.update(request, author);
 
         author = authorService.save(author);
@@ -52,7 +53,7 @@ public class AuthorApi {
 
     @GetMapping("{id}")
     public AuthorView getAuthor(@PathVariable String id) {
-        Author author = authorService.getAuthor(id);
+        Author author = authorService.getAuthor(new ObjectId(id));
         return authorViewMapper.toAuthorView(author);
     }
 

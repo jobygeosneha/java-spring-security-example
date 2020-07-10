@@ -3,12 +3,11 @@ package io.example.domain.mapper;
 import io.example.domain.dto.BookView;
 import io.example.domain.model.Book;
 import org.mapstruct.AfterMapping;
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ObjectIdMapper.class)
 public abstract class BookViewMapper {
 
     private UserViewMapper userViewMapper;

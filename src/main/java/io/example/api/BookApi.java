@@ -7,6 +7,7 @@ import io.example.domain.mapper.BookViewMapper;
 import io.example.domain.model.Book;
 import io.example.service.BookService;
 import io.swagger.annotations.Api;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,7 @@ public class BookApi {
 
     @PutMapping("{id}")
     public BookView editBook(@PathVariable String id, @RequestBody EditBookRequest request) {
-        Book book = bookService.getBook(id);
+        Book book = bookService.getBook(new ObjectId(id));
         bookEditMapper.update(request, book);
 
         book = bookService.save(book);
@@ -52,7 +53,7 @@ public class BookApi {
 
     @GetMapping("{id}")
     public BookView getBook(@PathVariable String id) {
-        Book book = bookService.getBook(id);
+        Book book = bookService.getBook(new ObjectId(id));
         return bookViewMapper.toBookView(book);
     }
 
