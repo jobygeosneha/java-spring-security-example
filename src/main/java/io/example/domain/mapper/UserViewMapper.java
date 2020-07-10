@@ -6,7 +6,6 @@ import io.example.service.UserService;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
 @Mapper(componentModel = "spring", uses = {UserService.class, ObjectIdMapper.class})
 public abstract class UserViewMapper {
@@ -21,7 +20,7 @@ public abstract class UserViewMapper {
     public abstract UserView toUserView(User user);
 
     public UserView toUserViewById(ObjectId id) {
-        if (StringUtils.isEmpty(id)) {
+        if (id == null) {
             return null;
         }
         return toUserView(userService.getUser(id));

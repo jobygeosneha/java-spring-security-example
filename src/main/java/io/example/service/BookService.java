@@ -5,9 +5,11 @@ import io.example.domain.model.Author;
 import io.example.domain.model.Book;
 import io.example.repository.BookRepo;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,14 +43,23 @@ public class BookService {
     }
 
     private void updateAuthors(Book book) {
-        final ObjectId bookId = book.getId();
         List<Author> authors = authorService.getAuthors(book.getAuthorIds());
-        authors.forEach(author -> author.getBookIds().add(bookId));
+        authors.forEach(author -> author.getBookIds().add(book.getId()));
         authorService.saveAll(authors);
     }
 
     public Book getBook(ObjectId id) {
         return bookRepo.findById(id).orElseThrow(() -> new NotFoundException(Book.class, id));
+    }
+
+    public List<Book> getBooks(List<ObjectId> ids) {
+        List<Book> books = new ArrayList<>();
+        bookRepo.findAllById(ids).forEach(book -> books.add(book));
+        return books;
+    }
+
+    public List<Book> getBooksWithAuthors(int page, int size) {
+        return bookRepo.findBooksWithAuthors(PageRequest.of(page, size));
     }
 
 }

@@ -7,6 +7,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Document @Data
 public class Book implements Serializable {
 
     @Id
@@ -41,5 +43,6 @@ public class Book implements Serializable {
     private int hardcover;
 
     private Set<ObjectId> authorIds = new HashSet<>();
+    private Set<Author> authors = new HashSet<>();
 
 }

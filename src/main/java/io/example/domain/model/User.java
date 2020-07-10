@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Data
+@Document @Data
 public class User implements UserDetails, Serializable {
 
     @Id
@@ -30,7 +31,7 @@ public class User implements UserDetails, Serializable {
     @Indexed(unique=true)
     private String username;
     private String password;
-    @Indexed(unique=true)
+    @Indexed
     private String fullName;
 
     public User() {
