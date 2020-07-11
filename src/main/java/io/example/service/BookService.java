@@ -52,14 +52,15 @@ public class BookService {
         return bookRepo.findById(id).orElseThrow(() -> new NotFoundException(Book.class, id));
     }
 
-    public List<Book> getBooks(List<ObjectId> ids) {
+    public List<Book> getBooks(Iterable<ObjectId> ids) {
         List<Book> books = new ArrayList<>();
         bookRepo.findAllById(ids).forEach(book -> books.add(book));
         return books;
     }
 
-    public List<Book> getBooksWithAuthors(int page, int size) {
-        return bookRepo.findBooksWithAuthors(PageRequest.of(page, size));
+    public List<Author> getBookAuthors(ObjectId id) {
+        Book book = this.getBook(id);
+        return authorService.getAuthors(book.getAuthorIds());
     }
 
 }

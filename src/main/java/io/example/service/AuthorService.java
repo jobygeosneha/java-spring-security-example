@@ -2,6 +2,7 @@ package io.example.service;
 
 import io.example.domain.exception.NotFoundException;
 import io.example.domain.model.Author;
+import io.example.domain.model.Book;
 import io.example.repository.AuthorRepo;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,11 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepo authorRepo;
+    private final BookService bookService;
 
-    public AuthorService(AuthorRepo authorRepo) {
+    public AuthorService(AuthorRepo authorRepo, BookService bookService) {
         this.authorRepo = authorRepo;
+        this.bookService = bookService;
     }
 
     public Author save(Author author) {
@@ -34,6 +37,11 @@ public class AuthorService {
         List<Author> authors = new ArrayList<>();
         authorRepo.findAllById(ids).forEach(author -> authors.add(author));
         return authors;
+    }
+
+    public List<Book> getAuthorBooks(ObjectId id) {
+        Author author = this.getAuthor(id);
+        return bookService.getBooks(author.getBookIds());
     }
 
 }
