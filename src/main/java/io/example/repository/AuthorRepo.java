@@ -15,7 +15,4 @@ public interface AuthorRepo extends MongoRepository<Author, ObjectId> {
     @Cacheable
     Optional<Author> findById(ObjectId objectId);
 
-    @Cacheable
-    Iterable<Author> findAllById(Iterable<ObjectId> objectIds);
-
 }

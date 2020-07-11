@@ -15,7 +15,4 @@ public interface BookRepo extends MongoRepository<Book, ObjectId> {
     @Cacheable
     Optional<Book> findById(ObjectId objectId);
 
-    @Cacheable
-    Iterable<Book> findAllById(Iterable<ObjectId> objectIds);
-
 }
