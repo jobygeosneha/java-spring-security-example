@@ -14,11 +14,9 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepo authorRepo;
-    private final BookService bookService;
 
-    public AuthorService(AuthorRepo authorRepo, BookService bookService) {
+    public AuthorService(AuthorRepo authorRepo) {
         this.authorRepo = authorRepo;
-        this.bookService = bookService;
     }
 
     public Author save(Author author) {
@@ -37,11 +35,6 @@ public class AuthorService {
         List<Author> authors = new ArrayList<>();
         authorRepo.findAllById(ids).forEach(author -> authors.add(author));
         return authors;
-    }
-
-    public List<Book> getAuthorBooks(ObjectId id) {
-        Author author = this.getAuthor(id);
-        return bookService.getBooks(author.getBookIds());
     }
 
 }

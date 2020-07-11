@@ -5,7 +5,6 @@ import io.example.domain.model.Author;
 import io.example.domain.model.Book;
 import io.example.repository.BookRepo;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,11 +55,6 @@ public class BookService {
         List<Book> books = new ArrayList<>();
         bookRepo.findAllById(ids).forEach(book -> books.add(book));
         return books;
-    }
-
-    public List<Author> getBookAuthors(ObjectId id) {
-        Book book = this.getBook(id);
-        return authorService.getAuthors(book.getAuthorIds());
     }
 
 }

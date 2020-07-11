@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = ObjectIdMapper.class)
 public abstract class AuthorViewMapper {
 
@@ -18,6 +20,8 @@ public abstract class AuthorViewMapper {
     }
 
     public abstract AuthorView toAuthorView(Author author);
+
+    public abstract List<AuthorView> toAuthorView(List<Author> authors);
 
     @AfterMapping
     protected void after(Author author, @MappingTarget AuthorView authorView) {
