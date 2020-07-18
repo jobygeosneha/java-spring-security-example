@@ -1,5 +1,6 @@
 package io.example.configuration;
 
+import io.example.domain.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,16 +16,26 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     private final Logger logger = LogManager.getLogger();
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiCallError> handleNotFoundException(HttpServletRequest request, NotFoundException ex) {
+        logger.error("NotFoundException {}\n", request.getRequestURI(), ex);
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ApiCallError("Not found exception", asList(ex.getMessage())));
+    }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ApiCallError> handleValidationException(HttpServletRequest request, ValidationException ex) {
@@ -32,7 +43,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiCallError(LocalDateTime.now(), "Validation exception", ex.getMessage()));
+                .body(new ApiCallError("Validation exception", asList(ex.getMessage())));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -41,7 +52,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiCallError(LocalDateTime.now(), "Missing request parameter", ex.getMessage()));
+                .body(new ApiCallError("Missing request parameter", asList(ex.getMessage())));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -55,7 +66,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiCallError(LocalDateTime.now(), "Method argument type mismatch", details));
+                .body(new ApiCallError("Method argument type mismatch", asList(details)));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -76,7 +87,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiCallError(LocalDateTime.now(), "Method argument validation failed", details));
+                .body(new ApiCallError("Method argument validation failed", details));
     }
 
     @ExceptionHandler(Exception.class)
@@ -85,16 +96,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiCallError(LocalDateTime.now(), "Internal server error", ex.getMessage()));
+                .body(new ApiCallError("Internal server error", asList(ex.getMessage())));
     }
 }
 
 @Data @NoArgsConstructor @AllArgsConstructor
-class ApiCallError {
+class ApiCallError<T> {
 
-    private LocalDateTime timestamp;
     private String message;
-    private Object details;
+    private List<T> details;
 
 }
 
