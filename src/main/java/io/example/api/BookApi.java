@@ -4,11 +4,6 @@ import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.BookView;
 import io.example.domain.dto.EditBookRequest;
 import io.example.domain.dto.ListResponse;
-import io.example.domain.mapper.AuthorViewMapper;
-import io.example.domain.mapper.BookEditMapper;
-import io.example.domain.mapper.BookViewMapper;
-import io.example.domain.model.Author;
-import io.example.domain.model.Book;
 import io.example.service.AuthorService;
 import io.example.service.BookService;
 import io.swagger.annotations.Api;
@@ -21,60 +16,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @Api(tags = "Book")
 @RestController @RequestMapping(path = "api/book")
 public class BookApi {
 
-    private final BookEditMapper bookEditMapper;
-    private final BookViewMapper bookViewMapper;
-    private final AuthorViewMapper authorViewMapper;
     private final BookService bookService;
     private final AuthorService authorService;
 
-    public BookApi(BookEditMapper bookEditMapper,
-                   BookViewMapper bookViewMapper,
-                   AuthorViewMapper authorViewMapper,
-                   BookService bookService,
+    public BookApi(BookService bookService,
                    AuthorService authorService) {
-        this.bookEditMapper = bookEditMapper;
-        this.bookViewMapper = bookViewMapper;
-        this.authorViewMapper = authorViewMapper;
         this.bookService = bookService;
         this.authorService = authorService;
     }
 
     @PostMapping
     public BookView createBook(@RequestBody EditBookRequest request) {
-        Book book = bookEditMapper.create(request);
-
-        book = bookService.save(book);
-
-        return bookViewMapper.toBookView(book);
+        return bookService.create(request);
     }
 
     @PutMapping("{id}")
     public BookView editBook(@PathVariable String id, @RequestBody EditBookRequest request) {
-        Book book = bookService.getBook(new ObjectId(id));
-        bookEditMapper.update(request, book);
-
-        book = bookService.save(book);
-
-        return bookViewMapper.toBookView(book);
+        return bookService.update(new ObjectId(id), request);
     }
 
     @GetMapping("{id}")
     public BookView getBook(@PathVariable String id) {
-        Book book = bookService.getBook(new ObjectId(id));
-        return bookViewMapper.toBookView(book);
+        return bookService.getBook(new ObjectId(id));
     }
 
     @GetMapping("{id}/author")
     public ListResponse<AuthorView> getBookAuthors(@PathVariable String id) {
-        Book book = bookService.getBook(new ObjectId(id));
-        List<Author> authors = authorService.getAuthors(book.getAuthorIds());
-        return new ListResponse<>(authorViewMapper.toAuthorView(authors));
+        return new ListResponse<>(authorService.getBookAuthors(new ObjectId(id)));
     }
 
 }

@@ -1,5 +1,6 @@
 package io.example.repository;
 
+import io.example.domain.exception.NotFoundException;
 import io.example.domain.model.User;
 import org.bson.types.ObjectId;
 import org.springframework.cache.annotation.CacheConfig;
@@ -26,6 +27,11 @@ public interface UserRepo extends MongoRepository<User, ObjectId> {
 
     @Cacheable
     Optional<User> findById(ObjectId objectId);
+
+    @Cacheable
+    default User getById(ObjectId id) {
+        return findById(id).orElseThrow(() -> new NotFoundException(User.class, id));
+    }
 
     @Cacheable
     Optional<User> findByUsername(String username);

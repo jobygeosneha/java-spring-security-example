@@ -42,6 +42,5 @@ public class Book implements Serializable {
     private int hardcover;
 
     private Set<ObjectId> authorIds = new HashSet<>();
-    private Set<Author> authors = new HashSet<>();
 
 }

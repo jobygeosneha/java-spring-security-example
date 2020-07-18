@@ -1,60 +1,80 @@
 package io.example.service;
 
-import io.example.domain.exception.NotFoundException;
+import io.example.domain.dto.BookView;
+import io.example.domain.dto.EditBookRequest;
+import io.example.domain.mapper.BookEditMapper;
+import io.example.domain.mapper.BookViewMapper;
 import io.example.domain.model.Author;
 import io.example.domain.model.Book;
+import io.example.repository.AuthorRepo;
 import io.example.repository.BookRepo;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BookService {
 
     private final BookRepo bookRepo;
-    private final AuthorService authorService;
+    private final AuthorRepo authorRepo;
+    private final BookEditMapper bookEditMapper;
+    private final BookViewMapper bookViewMapper;
 
     public BookService(BookRepo bookRepo,
-                       AuthorService authorService) {
+                       AuthorRepo authorRepo,
+                       BookEditMapper bookEditMapper,
+                       BookViewMapper bookViewMapper) {
         this.bookRepo = bookRepo;
-        this.authorService = authorService;
+        this.authorRepo = authorRepo;
+        this.bookEditMapper = bookEditMapper;
+        this.bookViewMapper = bookViewMapper;
     }
 
     @Transactional
-    public Book save(Book book) {
-        book = bookRepo.save(book);
+    public BookView create(EditBookRequest request) {
+        Book book = bookEditMapper.create(request);
 
+        book = bookRepo.save(book);
         updateAuthors(book);
 
-        return book;
+        return bookViewMapper.toBookView(book);
     }
 
     @Transactional
-    public List<Book> saveAll(List<Book> books) {
-        books = bookRepo.saveAll(books);
+    public BookView update(ObjectId id, EditBookRequest request) {
+        Book book = bookRepo.getById(id);
+        bookEditMapper.update(request, book);
 
-        books.forEach(book -> updateAuthors(book));
+        book = bookRepo.save(book);
+        if (!CollectionUtils.isEmpty(request.getAuthorIds())) {
+            updateAuthors(book);
+        }
 
-        return books;
+        return bookViewMapper.toBookView(book);
     }
 
     private void updateAuthors(Book book) {
-        List<Author> authors = authorService.getAuthors(book.getAuthorIds());
+        List<Author> authors = authorRepo.findAllById(book.getAuthorIds());
         authors.forEach(author -> author.getBookIds().add(book.getId()));
-        authorService.saveAll(authors);
+        authorRepo.saveAll(authors);
     }
 
-    public Book getBook(ObjectId id) {
-        return bookRepo.findById(id).orElseThrow(() -> new NotFoundException(Book.class, id));
+    public BookView getBook(ObjectId id) {
+        Book book = bookRepo.getById(id);
+        return bookViewMapper.toBookView(book);
     }
 
-    public List<Book> getBooks(Iterable<ObjectId> ids) {
-        List<Book> books = new ArrayList<>();
-        bookRepo.findAllById(ids).forEach(book -> books.add(book));
-        return books;
+    public List<BookView> getBooks(Iterable<ObjectId> ids) {
+        List<Book> books = bookRepo.findAllById(ids);
+        return bookViewMapper.toBookView(books);
+    }
+
+    public List<BookView> getAuthorBooks(ObjectId authorId) {
+        Author author = authorRepo.getById(authorId);
+        return bookViewMapper.toBookView(bookRepo.findAllById(author.getBookIds()));
     }
 
     public void searchBooks() {

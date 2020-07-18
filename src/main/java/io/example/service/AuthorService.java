@@ -1,11 +1,18 @@
 package io.example.service;
 
+import io.example.domain.dto.AuthorView;
+import io.example.domain.dto.EditAuthorRequest;
 import io.example.domain.exception.NotFoundException;
+import io.example.domain.mapper.AuthorEditMapper;
+import io.example.domain.mapper.AuthorViewMapper;
 import io.example.domain.model.Author;
 import io.example.domain.model.Book;
 import io.example.repository.AuthorRepo;
+import io.example.repository.BookRepo;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.Tailable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,27 +21,50 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepo authorRepo;
+    private final BookRepo bookRepo;
+    private final AuthorEditMapper authorEditMapper;
+    private final AuthorViewMapper authorViewMapper;
 
-    public AuthorService(AuthorRepo authorRepo) {
+    public AuthorService(AuthorRepo authorRepo,
+                         BookRepo bookRepo,
+                         AuthorEditMapper authorEditMapper,
+                         AuthorViewMapper authorViewMapper) {
         this.authorRepo = authorRepo;
+        this.bookRepo = bookRepo;
+        this.authorEditMapper = authorEditMapper;
+        this.authorViewMapper = authorViewMapper;
     }
 
-    public Author save(Author author) {
-        return authorRepo.save(author);
+    @Transactional
+    public AuthorView create(EditAuthorRequest request) {
+        Author author = authorEditMapper.create(request);
+
+        author = authorRepo.save(author);
+
+        return authorViewMapper.toAuthorView(author);
     }
 
-    public List<Author> saveAll(List<Author> authors) {
-        return authorRepo.saveAll(authors);
+    @Transactional
+    public AuthorView update(ObjectId id, EditAuthorRequest request) {
+        Author author = authorRepo.getById(id);
+        authorEditMapper.update(request, author);
+
+        author = authorRepo.save(author);
+
+        return authorViewMapper.toAuthorView(author);
     }
 
-    public Author getAuthor(ObjectId id) {
-        return authorRepo.findById(id).orElseThrow(() -> new NotFoundException(Author.class, id));
+    public AuthorView getAuthor(ObjectId id) {
+        return authorViewMapper.toAuthorView(authorRepo.getById(id));
     }
 
-    public List<Author> getAuthors(Iterable<ObjectId> ids) {
-        List<Author> authors = new ArrayList<>();
-        authorRepo.findAllById(ids).forEach(author -> authors.add(author));
-        return authors;
+    public List<AuthorView> getAuthors(Iterable<ObjectId> ids) {
+        return authorViewMapper.toAuthorView(authorRepo.findAllById(ids));
+    }
+
+    public List<AuthorView> getBookAuthors(ObjectId bookId) {
+        Book book = bookRepo.getById(bookId);
+        return authorViewMapper.toAuthorView(authorRepo.findAllById(book.getAuthorIds()));
     }
 
     public void searchAuthors() {
