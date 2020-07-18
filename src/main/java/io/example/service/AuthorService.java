@@ -37,4 +37,8 @@ public class AuthorService {
         return authors;
     }
 
+    public void searchAuthors() {
+
+    }
+
 }
