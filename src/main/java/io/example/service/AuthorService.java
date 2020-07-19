@@ -2,6 +2,7 @@ package io.example.service;
 
 import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.EditAuthorRequest;
+import io.example.domain.dto.SearchAuthorsRequest;
 import io.example.domain.exception.NotFoundException;
 import io.example.domain.mapper.AuthorEditMapper;
 import io.example.domain.mapper.AuthorViewMapper;
@@ -67,8 +68,8 @@ public class AuthorService {
         return authorViewMapper.toAuthorView(authorRepo.findAllById(book.getAuthorIds()));
     }
 
-    public void searchAuthors() {
-
+    public List<AuthorView> searchAuthors(SearchAuthorsRequest request) {
+        return authorViewMapper.toAuthorView(authorRepo.searchAuthors(request));
     }
 
 }

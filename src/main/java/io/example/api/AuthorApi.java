@@ -4,6 +4,7 @@ import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.BookView;
 import io.example.domain.dto.EditAuthorRequest;
 import io.example.domain.dto.ListResponse;
+import io.example.domain.dto.SearchAuthorsRequest;
 import io.example.service.AuthorService;
 import io.example.service.BookService;
 import io.swagger.annotations.Api;
@@ -47,6 +48,11 @@ public class AuthorApi {
     @GetMapping("{id}/book")
     public ListResponse<BookView> getAuthorBooks(@PathVariable String id) {
         return new ListResponse<>(bookService.getAuthorBooks(new ObjectId(id)));
+    }
+
+    @PostMapping("search")
+    public ListResponse<AuthorView> searchAuthors(@RequestBody SearchAuthorsRequest request) {
+        return new ListResponse<>(authorService.searchAuthors(request));
     }
 
 }
