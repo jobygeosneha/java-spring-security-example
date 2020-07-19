@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -67,6 +68,9 @@ class AuthorRepoCustomImpl implements AuthorRepoCustom {
         }
         if (!StringUtils.isEmpty(request.getFullName())) {
             criterias.add(Criteria.where("fullName").regex(String.format("^%s", request.getFullName()), "i"));
+        }
+        if (!CollectionUtils.isEmpty(request.getGenres())) {
+            criterias.add(Criteria.where("genres").all(request.getGenres()));
         }
         if (!criterias.isEmpty()) {
             Criteria authorCriteria = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));

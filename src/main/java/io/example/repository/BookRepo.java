@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -67,6 +68,9 @@ class BookRepoCustomImpl implements BookRepoCustom {
         }
         if (!StringUtils.isEmpty(request.getTitle())) {
             criterias.add(Criteria.where("title").regex(String.format("^%s", request.getTitle()), "i"));
+        }
+        if (!CollectionUtils.isEmpty(request.getGenres())) {
+            criterias.add(Criteria.where("genres").all(request.getGenres()));
         }
         if (!StringUtils.isEmpty(request.getIsbn13())) {
             criterias.add(Criteria.where("isbn13").is(request.getIsbn13()));
