@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Api(tags = "Author")
 @RestController @RequestMapping(path = "api/author")
 public class AuthorApi {
@@ -31,12 +33,12 @@ public class AuthorApi {
     }
 
     @PostMapping
-    public AuthorView createAuthor(@RequestBody EditAuthorRequest request) {
+    public AuthorView createAuthor(@RequestBody @Valid EditAuthorRequest request) {
         return authorService.create(request);
     }
 
     @PutMapping("{id}")
-    public AuthorView editAuthor(@PathVariable String id, @RequestBody EditAuthorRequest request) {
+    public AuthorView editAuthor(@PathVariable String id, @RequestBody @Valid EditAuthorRequest request) {
         return authorService.update(new ObjectId(id), request);
     }
 
@@ -51,7 +53,7 @@ public class AuthorApi {
     }
 
     @PostMapping("search")
-    public ListResponse<AuthorView> searchAuthors(@RequestBody SearchAuthorsRequest request) {
+    public ListResponse<AuthorView> searchAuthors(@RequestBody @Valid SearchAuthorsRequest request) {
         return new ListResponse<>(authorService.searchAuthors(request));
     }
 

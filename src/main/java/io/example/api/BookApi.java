@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Api(tags = "Book")
 @RestController @RequestMapping(path = "api/book")
 public class BookApi {
@@ -31,12 +33,12 @@ public class BookApi {
     }
 
     @PostMapping
-    public BookView createBook(@RequestBody EditBookRequest request) {
+    public BookView createBook(@RequestBody @Valid EditBookRequest request) {
         return bookService.create(request);
     }
 
     @PutMapping("{id}")
-    public BookView editBook(@PathVariable String id, @RequestBody EditBookRequest request) {
+    public BookView editBook(@PathVariable String id, @RequestBody @Valid EditBookRequest request) {
         return bookService.update(new ObjectId(id), request);
     }
 
@@ -51,7 +53,7 @@ public class BookApi {
     }
 
     @PostMapping("search")
-    public ListResponse<BookView> searchBooks(@RequestBody SearchBooksRequest request) {
+    public ListResponse<BookView> searchBooks(@RequestBody @Valid SearchBooksRequest request) {
         return new ListResponse<>(bookService.searchBooks(request));
     }
 

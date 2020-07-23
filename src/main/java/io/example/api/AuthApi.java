@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Api(tags = "Authentication")
 @RestController @RequestMapping(path = "api/auth")
 public class AuthApi {
@@ -39,7 +41,7 @@ public class AuthApi {
     }
 
     @PostMapping
-    public ResponseEntity<UserView> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<UserView> login(@RequestBody @Valid AuthRequest authRequest) {
         try {
             Authentication authenticate = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));

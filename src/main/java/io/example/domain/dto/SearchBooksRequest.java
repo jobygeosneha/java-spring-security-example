@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
-public class SearchBooksRequest {
+public class SearchBooksRequest extends PageRequest {
 
     private String id;
 

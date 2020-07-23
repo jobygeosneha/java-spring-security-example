@@ -18,9 +18,11 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.lookup;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 
@@ -107,6 +109,8 @@ class BookRepoCustomImpl implements BookRepoCustom {
         }
 
         operations.add(sort(Sort.Direction.DESC, "createdAt"));
+        operations.add(skip((request.getPage() - 1) * request.getLimit()));
+        operations.add(limit(request.getLimit()));
 
         TypedAggregation<Book> aggregation = newAggregation(Book.class, operations);
         AggregationResults<Book> results = mongoTemplate.aggregate(aggregation, Book.class);

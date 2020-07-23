@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
-public class SearchAuthorsRequest {
+public class SearchAuthorsRequest extends PageRequest {
 
     private String id;
 
