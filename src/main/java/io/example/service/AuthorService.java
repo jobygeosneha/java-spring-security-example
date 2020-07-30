@@ -3,7 +3,6 @@ package io.example.service;
 import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.EditAuthorRequest;
 import io.example.domain.dto.SearchAuthorsRequest;
-import io.example.domain.exception.NotFoundException;
 import io.example.domain.mapper.AuthorEditMapper;
 import io.example.domain.mapper.AuthorViewMapper;
 import io.example.domain.model.Author;
@@ -11,11 +10,9 @@ import io.example.domain.model.Book;
 import io.example.repository.AuthorRepo;
 import io.example.repository.BookRepo;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.Tailable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

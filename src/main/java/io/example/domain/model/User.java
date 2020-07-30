@@ -26,7 +26,7 @@ public class User implements UserDetails, Serializable {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    private boolean enabled;
+    private boolean enabled = true;
 
     @Indexed(unique=true)
     private String username;

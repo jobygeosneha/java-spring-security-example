@@ -1,5 +1,6 @@
 package io.example;
 
+import io.example.domain.dto.CreateUserRequest;
 import io.example.domain.model.User;
 import io.example.service.UserService;
 import org.springframework.boot.SpringApplication;
@@ -25,31 +26,37 @@ public class Application {
 class DatabaseInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
     private final List<String> usernames = Arrays.asList(
-            "ada.lovelace@nix.com",
-            "alan.turing@nix.com",
-            "dennis.ritchie@nix.com"
+            "ada.lovelace@nix.io",
+            "alan.turing@nix.io",
+            "dennis.ritchie@nix.io"
+    );
+    private final List<String> fullNames = Arrays.asList(
+            "Ada Lovelace",
+            "Alan Turing",
+            "Dennis Ritchie"
     );
     private final String password = "Test12345_";
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
-    public DatabaseInitializer(UserService userService, PasswordEncoder passwordEncoder) {
+    public DatabaseInitializer(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        String encodedPassword = passwordEncoder.encode(password);
-
-        for (String username : usernames) {
-            if (userService.usernameExists(username)) {
+        for (int i = 0; i < usernames.size(); ++i) {
+            if (userService.usernameExists(usernames.get(i))) {
                 continue;
             }
 
-            User user = new User(username, encodedPassword);
-            userService.save(user);
+            CreateUserRequest request = new CreateUserRequest();
+            request.setUsername(usernames.get(i));
+            request.setFullName(fullNames.get(i));
+            request.setPassword(password);
+            request.setRePassword(password);
+
+            userService.create(request);
         }
     }
 
