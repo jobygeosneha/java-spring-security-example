@@ -9,6 +9,7 @@ import io.example.service.AuthorService;
 import io.example.service.BookService;
 import io.swagger.annotations.Api;
 import org.bson.types.ObjectId;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,27 +34,32 @@ public class AuthorApi {
     }
 
     @PostMapping
-    public AuthorView createAuthor(@RequestBody @Valid EditAuthorRequest request) {
+    public AuthorView create(@RequestBody @Valid EditAuthorRequest request) {
         return authorService.create(request);
     }
 
     @PutMapping("{id}")
-    public AuthorView editAuthor(@PathVariable String id, @RequestBody @Valid EditAuthorRequest request) {
+    public AuthorView edit(@PathVariable String id, @RequestBody @Valid EditAuthorRequest request) {
         return authorService.update(new ObjectId(id), request);
     }
 
+    @DeleteMapping("{id}")
+    public AuthorView delete(@PathVariable String id) {
+        return authorService.delete(new ObjectId(id));
+    }
+
     @GetMapping("{id}")
-    public AuthorView getAuthor(@PathVariable String id) {
+    public AuthorView get(@PathVariable String id) {
         return authorService.getAuthor(new ObjectId(id));
     }
 
     @GetMapping("{id}/book")
-    public ListResponse<BookView> getAuthorBooks(@PathVariable String id) {
+    public ListResponse<BookView> getBooks(@PathVariable String id) {
         return new ListResponse<>(bookService.getAuthorBooks(new ObjectId(id)));
     }
 
     @PostMapping("search")
-    public ListResponse<AuthorView> searchAuthors(@RequestBody @Valid SearchAuthorsRequest request) {
+    public ListResponse<AuthorView> search(@RequestBody @Valid SearchAuthorsRequest request) {
         return new ListResponse<>(authorService.searchAuthors(request));
     }
 

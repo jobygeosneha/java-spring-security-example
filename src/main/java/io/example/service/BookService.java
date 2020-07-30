@@ -63,6 +63,15 @@ public class BookService {
         authorRepo.saveAll(authors);
     }
 
+    @Transactional
+    public BookView delete(ObjectId id) {
+        Book book = bookRepo.getById(id);
+
+        bookRepo.delete(book);
+
+        return bookViewMapper.toBookView(book);
+    }
+
     public BookView getBook(ObjectId id) {
         Book book = bookRepo.getById(id);
         return bookViewMapper.toBookView(book);

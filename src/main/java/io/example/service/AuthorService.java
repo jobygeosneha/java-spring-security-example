@@ -52,6 +52,16 @@ public class AuthorService {
         return authorViewMapper.toAuthorView(author);
     }
 
+    @Transactional
+    public AuthorView delete(ObjectId id) {
+        Author author = authorRepo.getById(id);
+
+        authorRepo.delete(author);
+        bookRepo.deleteAll(bookRepo.findAllById(author.getBookIds()));
+
+        return authorViewMapper.toAuthorView(author);
+    }
+
     public AuthorView getAuthor(ObjectId id) {
         return authorViewMapper.toAuthorView(authorRepo.getById(id));
     }
