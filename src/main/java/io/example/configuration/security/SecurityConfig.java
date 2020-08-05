@@ -1,6 +1,7 @@
 package io.example.configuration.security;
 
-import io.example.service.UserService;
+import io.example.domain.model.User;
+import io.example.repository.UserRepo;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -18,22 +20,32 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static java.lang.String.format;
+
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final Logger logger;
-    private final UserService userService;
+    private final UserRepo userRepo;
     private final JwtTokenFilter jwtTokenFilter;
 
-    public SecurityConfig(Logger logger, UserService userService, JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfig(Logger logger, UserRepo userRepo, JwtTokenFilter jwtTokenFilter) {
         this.logger = logger;
-        this.userService = userService;
+        this.userRepo = userRepo;
         this.jwtTokenFilter = jwtTokenFilter;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
+        auth.userDetailsService(username -> {
+            User user = userRepo
+                    .findByUsername(username)
+                    .orElseThrow(
+                            () -> new UsernameNotFoundException(format("User with username - %s, not found", username))
+                    );
+
+            return user;
+        });
     }
 
     @Override

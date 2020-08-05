@@ -48,7 +48,7 @@ public class UserAdminApi {
         return userService.getUser(new ObjectId(id));
     }
 
-    @PostMapping
+    @PostMapping("search")
     public List<UserView> searchUsers(@RequestBody SearchUsersRequest request) {
         return userService.searchUsers(request);
     }

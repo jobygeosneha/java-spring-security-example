@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserView create(CreateUserRequest request) {
-        if (request.getPassword().equals(request.getRePassword())) {
+        if (!request.getPassword().equals(request.getRePassword())) {
             throw new ValidationException("Passwords don't match!");
         }
 

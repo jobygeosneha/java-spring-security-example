@@ -2,6 +2,7 @@ package io.example.domain.mapper;
 
 import io.example.domain.dto.UserView;
 import io.example.domain.model.User;
+import io.example.repository.UserRepo;
 import io.example.service.UserService;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
@@ -10,15 +11,11 @@ import org.springframework.expression.spel.ast.Literal;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {UserService.class, ObjectIdMapper.class})
+@Mapper(componentModel = "spring", uses = {ObjectIdMapper.class})
 public abstract class UserViewMapper {
 
-    private UserService userService;
-
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
+    private UserRepo userRepo;
 
     public abstract UserView toUserView(User user);
 
@@ -28,7 +25,7 @@ public abstract class UserViewMapper {
         if (id == null) {
             return null;
         }
-        return userService.getUser(id);
+        return toUserView(userRepo.getById(id));
     }
 
 }
