@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.ValidationException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -42,6 +43,9 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserView create(CreateUserRequest request) {
+        if (!userRepo.findByUsername(request.getUsername()).isEmpty()) {
+            throw new ValidationException("Username exists!");
+        }
         if (!request.getPassword().equals(request.getRePassword())) {
             throw new ValidationException("Passwords don't match!");
         }
@@ -62,6 +66,19 @@ public class UserService implements UserDetailsService {
         user = userRepo.save(user);
 
         return userViewMapper.toUserView(user);
+    }
+
+    @Transactional
+    public UserView upsert(CreateUserRequest request) {
+        Optional<User> optionalUser = userRepo.findByUsername(request.getUsername());
+
+        if (optionalUser.isEmpty()) {
+            return create(request);
+        } else {
+            UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+            updateUserRequest.setFullName(request.getFullName());
+            return update(optionalUser.get().getId(), updateUserRequest);
+        }
     }
 
     @Transactional
