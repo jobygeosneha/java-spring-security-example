@@ -2,12 +2,15 @@ package io.example.domain.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 public class EditBookRequest {
+
+    private List<@NotNull String> authorIds;
 
     @NotNull
     private String title;
@@ -18,9 +21,6 @@ public class EditBookRequest {
     private String isbn10;
     private String publisher;
     private LocalDate publishDate;
-    private int hardcover;
-
-    @NotNull
-    private List<@NotNull String> authorIds;
+    private Integer hardcover;
 
 }

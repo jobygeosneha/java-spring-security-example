@@ -43,12 +43,4 @@ public class IntegrationTestBase {
 
     }
 
-    protected <T> String toJson(T object) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(object);
-    }
-
-    protected <T> T fromJson(String payload, Class<T> clazz) throws JsonProcessingException {
-        return objectMapper.readValue(payload, clazz);
-    }
-
 }
