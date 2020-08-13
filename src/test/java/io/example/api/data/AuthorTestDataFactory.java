@@ -1,4 +1,4 @@
-package io.example.api.util;
+package io.example.api.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.example.domain.dto.AuthorView;

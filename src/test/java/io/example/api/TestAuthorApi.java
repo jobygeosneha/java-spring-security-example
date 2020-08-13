@@ -2,8 +2,8 @@ package io.example.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.example.api.util.AuthorTestDataFactory;
-import io.example.api.util.BookTestDataFactory;
+import io.example.api.data.AuthorTestDataFactory;
+import io.example.api.data.BookTestDataFactory;
 import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.BookView;
 import io.example.domain.dto.EditAuthorRequest;

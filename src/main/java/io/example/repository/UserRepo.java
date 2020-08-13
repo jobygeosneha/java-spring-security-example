@@ -45,7 +45,14 @@ public interface UserRepo extends UserRepoCustom, MongoRepository<User, ObjectId
 
     @Cacheable
     default User getById(ObjectId id) {
-        return findById(id).orElseThrow(() -> new NotFoundException(User.class, id));
+        Optional<User> optionalUser = findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new NotFoundException(User.class, id);
+        }
+        if (!optionalUser.get().isEnabled()) {
+            throw new NotFoundException(User.class, id);
+        }
+        return optionalUser.get();
     }
 
     @Cacheable

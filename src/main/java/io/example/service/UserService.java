@@ -85,6 +85,7 @@ public class UserService implements UserDetailsService {
     public UserView delete(ObjectId id) {
         User user = userRepo.getById(id);
 
+        user.setUsername(user.getUsername().replace("@", String.format("_%s@", user.getId().toString())));
         user.setEnabled(false);
         user = userRepo.save(user);
 

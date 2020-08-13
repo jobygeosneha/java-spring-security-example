@@ -1,9 +1,7 @@
-package io.example.api.util;
+package io.example.api.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.BookView;
-import io.example.domain.dto.EditAuthorRequest;
 import io.example.domain.dto.EditBookRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 

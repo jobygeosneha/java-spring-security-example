@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(tags = "UserAdmin")
@@ -29,27 +30,27 @@ public class UserAdminApi {
     }
 
     @PostMapping
-    public UserView createUser(@RequestBody CreateUserRequest request) {
+    public UserView create(@RequestBody @Valid CreateUserRequest request) {
         return userService.create(request);
     }
 
     @PutMapping("{id}")
-    public UserView updateUser(@PathVariable String id, @RequestBody UpdateUserRequest request) {
+    public UserView update(@PathVariable String id, @RequestBody @Valid UpdateUserRequest request) {
         return userService.update(new ObjectId(id), request);
     }
 
     @DeleteMapping("{id}")
-    public UserView deleteUser(@PathVariable String id) {
+    public UserView delete(@PathVariable String id) {
         return userService.delete(new ObjectId(id));
     }
 
     @GetMapping("{id}")
-    public UserView getUser(@PathVariable String id) {
+    public UserView get(@PathVariable String id) {
         return userService.getUser(new ObjectId(id));
     }
 
     @PostMapping("search")
-    public List<UserView> searchUsers(@RequestBody SearchUsersRequest request) {
+    public List<UserView> search(@RequestBody SearchUsersRequest request) {
         return userService.searchUsers(request);
     }
 
