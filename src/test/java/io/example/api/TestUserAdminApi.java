@@ -5,6 +5,7 @@ import io.example.api.data.UserTestDataFactory;
 import io.example.domain.dto.CreateUserRequest;
 import io.example.domain.dto.UpdateUserRequest;
 import io.example.domain.dto.UserView;
+import io.example.domain.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -39,7 +40,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
     @Autowired
     private UserTestDataFactory userTestDataFactory;
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testCreateSuccess() throws Exception {
         CreateUserRequest goodRequest = new CreateUserRequest();
         goodRequest.setUsername(String.format("test.user.%d@nix.com", currentTimeMillis()));
@@ -59,7 +60,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
         assertEquals(goodRequest.getFullName(), userView.getFullName(), "User fullname  update isn't applied!");
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testCreateFail() throws Exception {
         CreateUserRequest badRequest = new CreateUserRequest();
         badRequest.setUsername("invalid.username");
@@ -72,7 +73,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testCreateUsernameExists() throws Exception {
         UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -90,7 +91,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Username exists")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testCreatePasswordsMismatch() throws Exception {
         CreateUserRequest badRequest = new CreateUserRequest();
         badRequest.setUsername(String.format("test.user.%d@nix.com", currentTimeMillis()));
@@ -106,7 +107,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Passwords don't match")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testEditSuccess() throws Exception {
         UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -124,7 +125,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
         assertEquals(updateRequest.getFullName(), newUserView.getFullName(), "User fullname update isn't applied!");
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testEditFailBadRequest() throws Exception {
         UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -138,7 +139,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testEditFailNotFound() throws Exception {
         UpdateUserRequest updateRequest = new UpdateUserRequest();
         updateRequest.setFullName("Test User B");
@@ -151,7 +152,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Entity User with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testDeleteSuccess() throws Exception {
         UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -164,7 +165,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
                 .andExpect(status().isNotFound());
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testDeleteFailNotFound() throws Exception {
         this.mockMvc
                 .perform(delete(String.format("/api/admin/user/%s", "5f07c259ffb98843e36a2aa9")))
@@ -172,7 +173,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Entity User with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testDeleteAndCreateAgain() throws Exception {
         UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -202,7 +203,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
         assertEquals(userView.getUsername(), newUserView.getUsername(), "User names must match!");
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testGetSuccess() throws Exception {
         UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -216,7 +217,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
         assertEquals(userView.getId(), newUserView.getId(), "User ids must be equal!");
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testGetNotFound() throws Exception {
         this.mockMvc
                 .perform(get(String.format("/api/admin/user/%s", "5f07c259ffb98843e36a2aa9")))
