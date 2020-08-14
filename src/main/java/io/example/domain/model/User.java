@@ -5,15 +5,15 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Document @Data
 public class User implements UserDetails, Serializable {
@@ -33,6 +33,9 @@ public class User implements UserDetails, Serializable {
     private String password;
     @Indexed
     private String fullName;
+    private Set<ObjectId> roles = new HashSet<>();
+    @Transient
+    private Set<Role> authorities = new HashSet<>();
 
     public User() {
     }
@@ -41,11 +44,6 @@ public class User implements UserDetails, Serializable {
         this.username = username;
         this.password = password;
         this.enabled = true;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList();
     }
 
     @Override

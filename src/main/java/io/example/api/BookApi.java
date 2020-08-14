@@ -5,6 +5,7 @@ import io.example.domain.dto.BookView;
 import io.example.domain.dto.EditBookRequest;
 import io.example.domain.dto.ListResponse;
 import io.example.domain.dto.SearchBooksRequest;
+import io.example.domain.model.Role;
 import io.example.service.AuthorService;
 import io.example.service.BookService;
 import io.swagger.annotations.Api;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @Api(tags = "Book")
 @RestController @RequestMapping(path = "api/book")
+@RolesAllowed(Role.BOOK_ADMIN)
 public class BookApi {
 
     private final BookService bookService;

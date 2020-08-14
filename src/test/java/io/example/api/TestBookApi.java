@@ -8,6 +8,7 @@ import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.BookView;
 import io.example.domain.dto.EditBookRequest;
 import io.example.domain.dto.ListResponse;
+import io.example.domain.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,7 +45,7 @@ public class TestBookApi extends IntegrationTestBase {
     @Autowired
     private BookTestDataFactory bookTestDataFactory;
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN, Role.AUTHOR_ADMIN})
     public void testCreateSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
 
@@ -64,7 +65,7 @@ public class TestBookApi extends IntegrationTestBase {
         assertEquals(goodRequest.getTitle(), bookView.getTitle(), "Book title update isn't applied!");
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN})
     public void testCreateFail() throws Exception {
         EditBookRequest badRequest = new EditBookRequest();
 
@@ -76,7 +77,7 @@ public class TestBookApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN, Role.AUTHOR_ADMIN})
     public void testEditSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
         BookView bookView = bookTestDataFactory.createBook(mockMvc, List.of(authorView.getId()), "Test Book A");
@@ -97,7 +98,7 @@ public class TestBookApi extends IntegrationTestBase {
         assertEquals(updateRequest.getAbout(), newBookView.getAbout(), "Book about update isn't applied!");
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN, Role.AUTHOR_ADMIN})
     public void testEditFailBadRequest() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
         BookView bookView = bookTestDataFactory.createBook(mockMvc, List.of(authorView.getId()), "Test Book A");
@@ -112,7 +113,7 @@ public class TestBookApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN})
     public void testEditFailNotFound() throws Exception {
         EditBookRequest updateRequest = new EditBookRequest();
         updateRequest.setTitle("Test Book A");
@@ -125,7 +126,7 @@ public class TestBookApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Entity Book with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN, Role.AUTHOR_ADMIN})
     public void testDeleteSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
         BookView bookView = bookTestDataFactory.createBook(mockMvc, List.of(authorView.getId()), "Test Book A");
@@ -139,7 +140,7 @@ public class TestBookApi extends IntegrationTestBase {
                 .andExpect(status().isNotFound());
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN})
     public void testDeleteFailNotFound() throws Exception {
         this.mockMvc
                 .perform(delete(String.format("/api/book/%s", "5f07c259ffb98843e36a2aa9")))
@@ -147,7 +148,7 @@ public class TestBookApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Entity Book with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN, Role.AUTHOR_ADMIN})
     public void testGetSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
         BookView bookView = bookTestDataFactory.createBook(mockMvc, List.of(authorView.getId()), "Test Book A");
@@ -162,7 +163,7 @@ public class TestBookApi extends IntegrationTestBase {
         assertEquals(bookView.getId(), getBookView.getId(), "Book ids must be equal!");
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN})
     public void testGetNotFound() throws Exception {
         this.mockMvc
                 .perform(get(String.format("/api/book/%s", "5f07c259ffb98843e36a2aa9")))
@@ -170,7 +171,7 @@ public class TestBookApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Entity Book with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithMockUser
+    @Test @WithMockUser(roles = {Role.BOOK_ADMIN, Role.AUTHOR_ADMIN})
     public void testGetBookAuthorsSuccess() throws Exception {
         AuthorView authorView1 = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
         AuthorView authorView2 = authorTestDataFactory.createAuthor(mockMvc, "Test Author B");
