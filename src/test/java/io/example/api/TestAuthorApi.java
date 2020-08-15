@@ -76,7 +76,7 @@ public class TestAuthorApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN})
     public void testEditSuccess() throws Exception {
-        AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
+        AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
         EditAuthorRequest updateRequest = new EditAuthorRequest();
         updateRequest.setFullName("Test Author B");
@@ -96,7 +96,7 @@ public class TestAuthorApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN})
     public void testEditFailBadRequest() throws Exception {
-        AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
+        AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
         EditAuthorRequest updateRequest = new EditAuthorRequest();
 
@@ -123,7 +123,7 @@ public class TestAuthorApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN})
     public void testDeleteSuccess() throws Exception {
-        AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
+        AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
         this.mockMvc
                 .perform(delete(String.format("/api/author/%s", authorView.getId())))
@@ -144,7 +144,7 @@ public class TestAuthorApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN})
     public void testGetSuccess() throws Exception {
-        AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
+        AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
         MvcResult getResult = this.mockMvc
                 .perform(get(String.format("/api/author/%s", authorView.getId())))
@@ -164,11 +164,11 @@ public class TestAuthorApi extends IntegrationTestBase {
                 .andExpect(content().string(containsString("Entity Author with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN, Role.BOOK_ADMIN})
+    @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN})
     public void testGetAuthorBooksSuccess() throws Exception {
-        AuthorView authorView = authorTestDataFactory.createAuthor(mockMvc, "Test Author A");
-        BookView bookView1 = bookTestDataFactory.createBook(mockMvc, List.of(authorView.getId()), "Test Book A");
-        BookView bookView2 = bookTestDataFactory.createBook(mockMvc, List.of(authorView.getId()), "Test Book B");
+        AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
+        BookView bookView1 = bookTestDataFactory.createBook(List.of(authorView.getId()), "Test Book A");
+        BookView bookView2 = bookTestDataFactory.createBook(List.of(authorView.getId()), "Test Book B");
 
         MvcResult getBooksResult = this.mockMvc
                 .perform(get(String.format("/api/author/%s/book", authorView.getId())))

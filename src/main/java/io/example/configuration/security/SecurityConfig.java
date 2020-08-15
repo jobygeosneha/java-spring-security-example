@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/springfox-swagger-ui/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/api/auth").permitAll()
+                .antMatchers("/api/public/**").permitAll()
                 .anyRequest().authenticated();
 
         // Add JWT token filter

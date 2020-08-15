@@ -75,7 +75,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testCreateUsernameExists() throws Exception {
-        UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
+        UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
         CreateUserRequest badRequest = new CreateUserRequest();
         badRequest.setUsername(userView.getUsername());
@@ -109,7 +109,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testEditSuccess() throws Exception {
-        UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
+        UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
         UpdateUserRequest updateRequest = new UpdateUserRequest();
         updateRequest.setFullName("Test User B");
@@ -127,7 +127,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testEditFailBadRequest() throws Exception {
-        UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
+        UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
         UpdateUserRequest updateRequest = new UpdateUserRequest();
 
@@ -154,7 +154,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testDeleteSuccess() throws Exception {
-        UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
+        UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
         this.mockMvc
                 .perform(delete(String.format("/api/admin/user/%s", userView.getId())))
@@ -175,7 +175,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testDeleteAndCreateAgain() throws Exception {
-        UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
+        UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
         this.mockMvc
                 .perform(delete(String.format("/api/admin/user/%s", userView.getId())))
@@ -205,7 +205,7 @@ public class TestUserAdminApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testGetSuccess() throws Exception {
-        UserView userView = userTestDataFactory.createUser(mockMvc, String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
+        UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
         MvcResult getResult = this.mockMvc
                 .perform(get(String.format("/api/admin/user/%s", userView.getId())))
