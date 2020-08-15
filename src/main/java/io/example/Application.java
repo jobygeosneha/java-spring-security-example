@@ -43,17 +43,13 @@ class DatabaseInitializer implements ApplicationListener<ApplicationReadyEvent> 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         for (int i = 0; i < usernames.size(); ++i) {
-            if (userService.usernameExists(usernames.get(i))) {
-                continue;
-            }
-
             CreateUserRequest request = new CreateUserRequest();
             request.setUsername(usernames.get(i));
             request.setFullName(fullNames.get(i));
             request.setPassword(password);
             request.setRePassword(password);
 
-            userService.create(request);
+            userService.upsert(request);
         }
     }
 
