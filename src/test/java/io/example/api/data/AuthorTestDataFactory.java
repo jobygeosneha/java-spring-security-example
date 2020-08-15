@@ -3,6 +3,7 @@ package io.example.api.data;
 import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.EditAuthorRequest;
 import io.example.service.AuthorService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,10 @@ public class AuthorTestDataFactory {
 
     public AuthorView createAuthor(String fullName) {
         return createAuthor(fullName, null, null, null);
+    }
+
+    public void deleteAuthor(String id) {
+        authorService.delete(new ObjectId(id));
     }
 
 }

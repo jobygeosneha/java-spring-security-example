@@ -36,14 +36,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TestAuthorApi extends IntegrationTestBase {
 
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
+    private final AuthorTestDataFactory authorTestDataFactory;
+    private final BookTestDataFactory bookTestDataFactory;
+
     @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private AuthorTestDataFactory authorTestDataFactory;
-    @Autowired
-    private BookTestDataFactory bookTestDataFactory;
+    public TestAuthorApi(MockMvc mockMvc,
+                         ObjectMapper objectMapper,
+                         AuthorTestDataFactory authorTestDataFactory,
+                         BookTestDataFactory bookTestDataFactory) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+        this.authorTestDataFactory = authorTestDataFactory;
+        this.bookTestDataFactory = bookTestDataFactory;
+    }
 
     @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN})
     public void testCreateSuccess() throws Exception {

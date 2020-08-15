@@ -1,6 +1,7 @@
 package io.example.api;
 
 import io.example.domain.dto.CreateUserRequest;
+import io.example.domain.dto.ListResponse;
 import io.example.domain.dto.SearchUsersRequest;
 import io.example.domain.dto.UpdateUserRequest;
 import io.example.domain.dto.UserView;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import java.util.List;
 
 @Api(tags = "UserAdmin")
 @RestController @RequestMapping(path = "api/admin/user")
@@ -53,8 +53,8 @@ public class UserAdminApi {
     }
 
     @PostMapping("search")
-    public List<UserView> search(@RequestBody SearchUsersRequest request) {
-        return userService.searchUsers(request);
+    public ListResponse<UserView> search(@RequestBody SearchUsersRequest request) {
+        return new ListResponse<>(userService.searchUsers(request));
     }
 
 }

@@ -6,6 +6,14 @@ import lombok.EqualsAndHashCode;
 @Data @EqualsAndHashCode(callSuper = true)
 public class SearchUsersRequest extends PageRequest {
 
+    public SearchUsersRequest() {
+        super(1, 10);
+    }
+
+    public SearchUsersRequest(int page, int limit) {
+        super(page, limit);
+    }
+
     private String username;
     private String fullName;
 

@@ -9,6 +9,14 @@ import java.util.Set;
 @Data @EqualsAndHashCode(callSuper = true)
 public class SearchAuthorsRequest extends PageRequest {
 
+    public SearchAuthorsRequest() {
+        super(1, 10);
+    }
+
+    public SearchAuthorsRequest(int page, int limit) {
+        super(page, limit);
+    }
+
     private String id;
 
     private String creatorId;

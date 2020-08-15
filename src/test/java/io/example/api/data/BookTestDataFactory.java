@@ -3,6 +3,7 @@ package io.example.api.data;
 import io.example.domain.dto.BookView;
 import io.example.domain.dto.EditBookRequest;
 import io.example.service.BookService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -114,6 +115,10 @@ public class BookTestDataFactory {
     public BookView createBook(List<String> authorIds,
                                String title) {
         return createBook(authorIds, title, null, null, null, null, null, null, null, null);
+    }
+
+    public void deleteBook(String id) {
+        bookService.delete(new ObjectId(id));
     }
 
 }

@@ -80,10 +80,10 @@ class UserRepoCustomImpl implements UserRepoCustom {
 
         List<Criteria> criteriaList = new ArrayList<>();
         if (!StringUtils.isEmpty(request.getUsername())) {
-            criteriaList.add(Criteria.where("username").regex(String.format("^%s", request.getUsername()), "i"));
+            criteriaList.add(Criteria.where("username").regex(request.getUsername(), "i"));
         }
         if (!StringUtils.isEmpty(request.getFullName())) {
-            criteriaList.add(Criteria.where("fullName").regex(String.format("^%s", request.getFullName()), "i"));
+            criteriaList.add(Criteria.where("fullName").regex(request.getFullName(), "i"));
         }
         if (!criteriaList.isEmpty()) {
             Criteria userCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));

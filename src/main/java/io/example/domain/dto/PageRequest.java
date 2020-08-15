@@ -1,11 +1,13 @@
 package io.example.domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor
 public class PageRequest {
 
     @Min(value = 1, message = "Paging must start with page 1")

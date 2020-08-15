@@ -33,12 +33,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TestUserAdminApi extends IntegrationTestBase {
 
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
+    private final UserTestDataFactory userTestDataFactory;
+
     @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private UserTestDataFactory userTestDataFactory;
+    public TestUserAdminApi(MockMvc mockMvc, ObjectMapper objectMapper, UserTestDataFactory userTestDataFactory) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+        this.userTestDataFactory = userTestDataFactory;
+    }
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testCreateSuccess() throws Exception {

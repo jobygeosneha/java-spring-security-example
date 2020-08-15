@@ -3,6 +3,7 @@ package io.example.api.data;
 import io.example.domain.dto.CreateUserRequest;
 import io.example.domain.dto.UserView;
 import io.example.service.UserService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,10 @@ public class UserTestDataFactory {
     public UserView createUser(String username,
                                String fullName) {
         return createUser(username, fullName, "Test12345_");
+    }
+
+    public void deleteUser(String id) {
+        userService.delete(new ObjectId(id));
     }
 
 }
