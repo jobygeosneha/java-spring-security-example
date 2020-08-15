@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -35,7 +33,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(new ApiCallError("Not found exception", asList(ex.getMessage())));
+                .body(new ApiCallError("Not found exception", List.of(ex.getMessage())));
     }
 
     @ExceptionHandler(ValidationException.class)
@@ -44,7 +42,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiCallError("Validation exception", asList(ex.getMessage())));
+                .body(new ApiCallError("Validation exception", List.of(ex.getMessage())));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -53,7 +51,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiCallError("Missing request parameter", asList(ex.getMessage())));
+                .body(new ApiCallError("Missing request parameter", List.of(ex.getMessage())));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -67,7 +65,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiCallError("Method argument type mismatch", asList(details)));
+                .body(new ApiCallError("Method argument type mismatch", List.of(details)));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -106,7 +104,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiCallError("Internal server error", asList(ex.getMessage())));
+                .body(new ApiCallError("Internal server error", List.of(ex.getMessage())));
     }
 }
 

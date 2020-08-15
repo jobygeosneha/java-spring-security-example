@@ -18,8 +18,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 @Configuration @EnableSwagger2
 @Import({BeanValidatorPluginsConfiguration.class})
 public class SwaggerConfig {
@@ -28,8 +26,8 @@ public class SwaggerConfig {
     public Docket swaggerSpringMvcPlugin() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                .securityContexts(asList(securityContext()))
-                .securitySchemes(asList(apiKey()))
+                .securityContexts(List.of(securityContext()))
+                .securitySchemes(List.of(apiKey()))
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
@@ -58,7 +56,7 @@ public class SwaggerConfig {
 
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope[] authorizationScopes = {new AuthorizationScope("global", "accessEverything")};
-        return asList(new SecurityReference("JWT", authorizationScopes));
+        return List.of(new SecurityReference("JWT", authorizationScopes));
     }
 
 }
