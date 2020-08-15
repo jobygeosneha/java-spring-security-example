@@ -38,7 +38,7 @@ public interface UserRepo extends UserRepoCustom, MongoRepository<User, ObjectId
             @CacheEvict(key = "#p0.id"),
             @CacheEvict(key = "#p0.username")
     })
-    User save(User entity);
+    <S extends User> S save(S entity);
 
     @Cacheable
     Optional<User> findById(ObjectId objectId);
@@ -68,7 +68,7 @@ interface UserRepoCustom {
 
 class UserRepoCustomImpl implements UserRepoCustom {
 
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     UserRepoCustomImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
@@ -78,15 +78,15 @@ class UserRepoCustomImpl implements UserRepoCustom {
     public List<User> searchUsers(SearchUsersRequest request) {
         List<AggregationOperation> operations = new ArrayList<>();
 
-        List<Criteria> criterias = new ArrayList<>();
+        List<Criteria> criteriaList = new ArrayList<>();
         if (!StringUtils.isEmpty(request.getUsername())) {
-            criterias.add(Criteria.where("username").regex(String.format("^%s", request.getUsername()), "i"));
+            criteriaList.add(Criteria.where("username").regex(String.format("^%s", request.getUsername()), "i"));
         }
         if (!StringUtils.isEmpty(request.getFullName())) {
-            criterias.add(Criteria.where("fullName").regex(String.format("^%s", request.getFullName()), "i"));
+            criteriaList.add(Criteria.where("fullName").regex(String.format("^%s", request.getFullName()), "i"));
         }
-        if (!criterias.isEmpty()) {
-            Criteria userCriteria = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+        if (!criteriaList.isEmpty()) {
+            Criteria userCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
             operations.add(match(userCriteria));
         }
 

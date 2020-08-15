@@ -6,7 +6,6 @@ import io.example.domain.dto.UserView;
 import io.example.domain.mapper.UserViewMapper;
 import io.example.domain.model.User;
 import io.swagger.annotations.Api;
-import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +24,13 @@ import javax.validation.Valid;
 @RestController @RequestMapping(path = "api/auth")
 public class AuthApi {
 
-    private final Logger logger;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserViewMapper userViewMapper;
 
-    public AuthApi(Logger logger,
-                   AuthenticationManager authenticationManager,
+    public AuthApi(AuthenticationManager authenticationManager,
                    JwtTokenUtil jwtTokenUtil,
                    UserViewMapper userViewMapper) {
-        this.logger = logger;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userViewMapper = userViewMapper;

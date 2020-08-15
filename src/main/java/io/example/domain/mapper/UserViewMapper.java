@@ -3,11 +3,9 @@ package io.example.domain.mapper;
 import io.example.domain.dto.UserView;
 import io.example.domain.model.User;
 import io.example.repository.UserRepo;
-import io.example.service.UserService;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.spel.ast.Literal;
 
 import java.util.List;
 

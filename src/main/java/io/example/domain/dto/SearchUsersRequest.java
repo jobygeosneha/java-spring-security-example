@@ -1,8 +1,9 @@
 package io.example.domain.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Data
+@Data @EqualsAndHashCode(callSuper = true)
 public class SearchUsersRequest extends PageRequest {
 
     private String username;

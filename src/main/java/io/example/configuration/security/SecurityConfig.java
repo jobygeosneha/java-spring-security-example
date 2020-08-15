@@ -1,6 +1,5 @@
 package io.example.configuration.security;
 
-import io.example.domain.model.User;
 import io.example.repository.UserRepo;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
@@ -43,15 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> {
-            User user = userRepo
-                    .findByUsername(username)
-                    .orElseThrow(
-                            () -> new UsernameNotFoundException(format("User with username - %s, not found", username))
-                    );
-
-            return user;
-        });
+        auth.userDetailsService(username -> userRepo
+                .findByUsername(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(format("User with username - %s, not found", username))
+                ));
     }
 
     @Override

@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserView create(CreateUserRequest request) {
-        if (!userRepo.findByUsername(request.getUsername()).isEmpty()) {
+        if (userRepo.findByUsername(request.getUsername()).isPresent()) {
             throw new ValidationException("Username exists!");
         }
         if (!request.getPassword().equals(request.getRePassword())) {
@@ -93,13 +93,11 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo
+        return userRepo
                 .findByUsername(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(format("User with username - %s, not found", username))
                 );
-
-        return user;
     }
 
     public boolean usernameExists(String username) {

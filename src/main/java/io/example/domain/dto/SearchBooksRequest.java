@@ -1,12 +1,13 @@
 package io.example.domain.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Data @EqualsAndHashCode(callSuper = true)
 public class SearchBooksRequest extends PageRequest {
 
     private String id;

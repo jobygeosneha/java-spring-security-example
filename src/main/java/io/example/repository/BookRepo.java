@@ -55,54 +55,54 @@ class BookRepoCustomImpl implements BookRepoCustom {
     public List<Book> searchBooks(SearchBooksRequest request) {
         List<AggregationOperation> operations = new ArrayList<>();
 
-        List<Criteria> criterias = new ArrayList<>();
+        List<Criteria> criteriaList = new ArrayList<>();
         if (!StringUtils.isEmpty(request.getId())) {
-            criterias.add(Criteria.where("id").is(new ObjectId(request.getId())));
+            criteriaList.add(Criteria.where("id").is(new ObjectId(request.getId())));
         }
         if (!StringUtils.isEmpty(request.getCreatorId())) {
-            criterias.add(Criteria.where("creatorId").is(new ObjectId(request.getCreatorId())));
+            criteriaList.add(Criteria.where("creatorId").is(new ObjectId(request.getCreatorId())));
         }
         if (request.getCreatedAtStart() != null) {
-            criterias.add(Criteria.where("createdAt").gte(request.getCreatedAtStart()));
+            criteriaList.add(Criteria.where("createdAt").gte(request.getCreatedAtStart()));
         }
         if (request.getCreatedAtEnd() != null) {
-            criterias.add(Criteria.where("createdAt").lt(request.getCreatedAtEnd()));
+            criteriaList.add(Criteria.where("createdAt").lt(request.getCreatedAtEnd()));
         }
         if (!StringUtils.isEmpty(request.getTitle())) {
-            criterias.add(Criteria.where("title").regex(String.format("^%s", request.getTitle()), "i"));
+            criteriaList.add(Criteria.where("title").regex(String.format("^%s", request.getTitle()), "i"));
         }
         if (!CollectionUtils.isEmpty(request.getGenres())) {
-            criterias.add(Criteria.where("genres").all(request.getGenres()));
+            criteriaList.add(Criteria.where("genres").all(request.getGenres()));
         }
         if (!StringUtils.isEmpty(request.getIsbn13())) {
-            criterias.add(Criteria.where("isbn13").is(request.getIsbn13()));
+            criteriaList.add(Criteria.where("isbn13").is(request.getIsbn13()));
         }
         if (!StringUtils.isEmpty(request.getIsbn10())) {
-            criterias.add(Criteria.where("isbn10").is(request.getIsbn10()));
+            criteriaList.add(Criteria.where("isbn10").is(request.getIsbn10()));
         }
         if (!StringUtils.isEmpty(request.getPublisher())) {
-            criterias.add(Criteria.where("publisher").regex(String.format("^%s", request.getPublisher()), "i"));
+            criteriaList.add(Criteria.where("publisher").regex(String.format("^%s", request.getPublisher()), "i"));
         }
         if (request.getPublishDateStart() != null) {
-            criterias.add(Criteria.where("createdAt").gte(request.getPublishDateStart()));
+            criteriaList.add(Criteria.where("createdAt").gte(request.getPublishDateStart()));
         }
         if (request.getPublishDateEnd() != null) {
-            criterias.add(Criteria.where("createdAt").lt(request.getPublishDateEnd()));
+            criteriaList.add(Criteria.where("createdAt").lt(request.getPublishDateEnd()));
         }
-        if (!criterias.isEmpty()) {
-            Criteria bookCriteria = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+        if (!criteriaList.isEmpty()) {
+            Criteria bookCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
             operations.add(match(bookCriteria));
         }
 
-        criterias = new ArrayList<>();
+        criteriaList = new ArrayList<>();
         if (!StringUtils.isEmpty(request.getAuthorId())) {
-            criterias.add(Criteria.where("author.id").is(new ObjectId(request.getAuthorId())));
+            criteriaList.add(Criteria.where("author.id").is(new ObjectId(request.getAuthorId())));
         }
         if (!StringUtils.isEmpty(request.getAuthorFullName())) {
-            criterias.add(Criteria.where("author.fullName").regex(String.format("^%s", request.getAuthorFullName()), "i"));
+            criteriaList.add(Criteria.where("author.fullName").regex(String.format("^%s", request.getAuthorFullName()), "i"));
         }
-        if (!criterias.isEmpty()) {
-            Criteria authorCriteria = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+        if (!criteriaList.isEmpty()) {
+            Criteria authorCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
             operations.add(lookup("author", "authorIds", "_id", "author"));
             operations.add(unwind("author", false));
             operations.add(match(authorCriteria));
