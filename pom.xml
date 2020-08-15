@@ -16,6 +16,21 @@
     <name>spring-security</name>
     <description>Example project for Spring Security</description>
 
+    <developers>
+        <developer>
+            <id>Yoh0xFF</id>
+            <name>Ioram Gordadze</name>
+            <email>Yoh0xFF@gmail.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -58,6 +73,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Embedded MongoDB for integration testing -->
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
