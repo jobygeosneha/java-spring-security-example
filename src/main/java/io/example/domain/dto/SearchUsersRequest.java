@@ -14,6 +14,7 @@ public class SearchUsersRequest extends PageRequest {
         super(page, limit);
     }
 
+    private String id;
     private String username;
     private String fullName;
 

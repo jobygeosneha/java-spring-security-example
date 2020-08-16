@@ -69,7 +69,7 @@ class AuthorRepoCustomImpl implements AuthorRepoCustom {
             criteriaList.add(Criteria.where("createdAt").lt(request.getCreatedAtEnd()));
         }
         if (!StringUtils.isEmpty(request.getFullName())) {
-            criteriaList.add(Criteria.where("fullName").regex(String.format("^%s", request.getFullName()), "i"));
+            criteriaList.add(Criteria.where("fullName").regex(request.getFullName(), "i"));
         }
         if (!CollectionUtils.isEmpty(request.getGenres())) {
             criteriaList.add(Criteria.where("genres").all(request.getGenres()));
@@ -81,10 +81,10 @@ class AuthorRepoCustomImpl implements AuthorRepoCustom {
 
         criteriaList = new ArrayList<>();
         if (!StringUtils.isEmpty(request.getBookId())) {
-            criteriaList.add(Criteria.where("book.id").is(new ObjectId(request.getBookId())));
+            criteriaList.add(Criteria.where("book._id").is(new ObjectId(request.getBookId())));
         }
         if (!StringUtils.isEmpty(request.getBookTitle())) {
-            criteriaList.add(Criteria.where("book.title").regex(String.format("^%s", request.getBookTitle()), "i"));
+            criteriaList.add(Criteria.where("book.title").regex(request.getBookTitle(), "i"));
         }
         if (!criteriaList.isEmpty()) {
             Criteria bookCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));

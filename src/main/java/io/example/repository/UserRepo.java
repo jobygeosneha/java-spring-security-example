@@ -79,6 +79,9 @@ class UserRepoCustomImpl implements UserRepoCustom {
         List<AggregationOperation> operations = new ArrayList<>();
 
         List<Criteria> criteriaList = new ArrayList<>();
+        if (!StringUtils.isEmpty(request.getId())) {
+            criteriaList.add(Criteria.where("id").is(new ObjectId(request.getId())));
+        }
         if (!StringUtils.isEmpty(request.getUsername())) {
             criteriaList.add(Criteria.where("username").regex(request.getUsername(), "i"));
         }

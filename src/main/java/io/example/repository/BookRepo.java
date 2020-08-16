@@ -69,7 +69,7 @@ class BookRepoCustomImpl implements BookRepoCustom {
             criteriaList.add(Criteria.where("createdAt").lt(request.getCreatedAtEnd()));
         }
         if (!StringUtils.isEmpty(request.getTitle())) {
-            criteriaList.add(Criteria.where("title").regex(String.format("^%s", request.getTitle()), "i"));
+            criteriaList.add(Criteria.where("title").regex(request.getTitle(), "i"));
         }
         if (!CollectionUtils.isEmpty(request.getGenres())) {
             criteriaList.add(Criteria.where("genres").all(request.getGenres()));
@@ -81,13 +81,13 @@ class BookRepoCustomImpl implements BookRepoCustom {
             criteriaList.add(Criteria.where("isbn10").is(request.getIsbn10()));
         }
         if (!StringUtils.isEmpty(request.getPublisher())) {
-            criteriaList.add(Criteria.where("publisher").regex(String.format("^%s", request.getPublisher()), "i"));
+            criteriaList.add(Criteria.where("publisher").regex(request.getPublisher(), "i"));
         }
         if (request.getPublishDateStart() != null) {
-            criteriaList.add(Criteria.where("createdAt").gte(request.getPublishDateStart()));
+            criteriaList.add(Criteria.where("publishDate").gte(request.getPublishDateStart()));
         }
         if (request.getPublishDateEnd() != null) {
-            criteriaList.add(Criteria.where("createdAt").lt(request.getPublishDateEnd()));
+            criteriaList.add(Criteria.where("publishDate").lt(request.getPublishDateEnd()));
         }
         if (!criteriaList.isEmpty()) {
             Criteria bookCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
@@ -96,10 +96,10 @@ class BookRepoCustomImpl implements BookRepoCustom {
 
         criteriaList = new ArrayList<>();
         if (!StringUtils.isEmpty(request.getAuthorId())) {
-            criteriaList.add(Criteria.where("author.id").is(new ObjectId(request.getAuthorId())));
+            criteriaList.add(Criteria.where("author._id").is(new ObjectId(request.getAuthorId())));
         }
         if (!StringUtils.isEmpty(request.getAuthorFullName())) {
-            criteriaList.add(Criteria.where("author.fullName").regex(String.format("^%s", request.getAuthorFullName()), "i"));
+            criteriaList.add(Criteria.where("author.fullName").regex(request.getAuthorFullName(), "i"));
         }
         if (!criteriaList.isEmpty()) {
             Criteria authorCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
@@ -113,6 +113,7 @@ class BookRepoCustomImpl implements BookRepoCustom {
         operations.add(limit(request.getLimit()));
 
         TypedAggregation<Book> aggregation = newAggregation(Book.class, operations);
+        System.out.println(aggregation.toString());
         AggregationResults<Book> results = mongoTemplate.aggregate(aggregation, Book.class);
         return results.getMappedResults();
     }

@@ -40,20 +40,32 @@ public class TestUserSearchApi extends IntegrationTestBase {
 
     @Test @WithMockUser(roles = {Role.USER_ADMIN})
     public void testSearch() throws Exception {
-        UserView userView1 = userTestDataFactory.createUser(String.format("william.baker.%d@gmail.com", currentTimeMillis()), "William Baker");
-        UserView userView2 = userTestDataFactory.createUser(String.format("james.adams.%d@gmail.com", currentTimeMillis()), "James Adams");
-        UserView userView3 = userTestDataFactory.createUser(String.format("evelin.clarke.%d@nix.io", currentTimeMillis()), "Evelyn Clarke");
-        UserView userView4 = userTestDataFactory.createUser(String.format("ella.davidson.%d@nix.io", currentTimeMillis()), "Ella Davidson");
-        UserView userView5 = userTestDataFactory.createUser(String.format("evelin.bradley.%d@outlook.com", currentTimeMillis()), "Evelyn Bradley");
+        UserView user1 = userTestDataFactory.createUser(String.format("william.baker.%d@gmail.com", currentTimeMillis()), "William Baker");
+        UserView user2 = userTestDataFactory.createUser(String.format("james.adams.%d@gmail.com", currentTimeMillis()), "James Adams");
+        UserView user3 = userTestDataFactory.createUser(String.format("evelin.clarke.%d@nix.io", currentTimeMillis()), "Evelyn Clarke");
+        UserView user4 = userTestDataFactory.createUser(String.format("ella.davidson.%d@nix.io", currentTimeMillis()), "Ella Davidson");
+        UserView user5 = userTestDataFactory.createUser(String.format("evelin.bradley.%d@outlook.com", currentTimeMillis()), "Evelyn Bradley");
 
+        testIdFilter(user1.getId());
         testUsernameFilter();
         testFullNameFilter();
 
-        userTestDataFactory.deleteUser(userView1.getId());
-        userTestDataFactory.deleteUser(userView2.getId());
-        userTestDataFactory.deleteUser(userView3.getId());
-        userTestDataFactory.deleteUser(userView4.getId());
-        userTestDataFactory.deleteUser(userView5.getId());
+        userTestDataFactory.deleteUser(user1.getId());
+        userTestDataFactory.deleteUser(user2.getId());
+        userTestDataFactory.deleteUser(user3.getId());
+        userTestDataFactory.deleteUser(user4.getId());
+        userTestDataFactory.deleteUser(user5.getId());
+    }
+
+    private void testIdFilter(String id) throws Exception {
+        SearchUsersRequest request;
+        ListResponse<UserView> userViewList;
+
+        // Search request with book id equal
+        request = new SearchUsersRequest();
+        request.setId(id);
+        userViewList = execute("/api/admin/user/search", request);
+        assertEquals(1, userViewList.getItems().size(), "Invalid search result!");
     }
 
     private void testUsernameFilter() throws Exception {
