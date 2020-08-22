@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // Enable CSRF and disable CSRF
+        // Enable CORS and disable CSRF
         http = http.cors().and().csrf().disable();
 
         // Set unauthorized requests exception handler
@@ -67,13 +67,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Set permissions on endpoints
         http.authorizeRequests()
+                // Swagger endpoints must be publicly accessible
                 .antMatchers("/").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/csrf").permitAll()
                 .antMatchers("/webjars/springfox-swagger-ui/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
+                // Our public endpoints
                 .antMatchers("/api/public/**").permitAll()
+                // Our private endpoints
                 .anyRequest().authenticated();
 
         // Add JWT token filter
