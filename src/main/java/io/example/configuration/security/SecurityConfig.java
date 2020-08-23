@@ -45,7 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(username -> userRepo
                 .findByUsername(username)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException(format("User with username - %s, not found", username))
+                        () -> new UsernameNotFoundException(
+                                format("User: %s, not found", username)
+                        )
                 ));
     }
 
