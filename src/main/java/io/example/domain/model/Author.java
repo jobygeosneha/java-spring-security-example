@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Document @Data
+@Document(collection = "authors") @Data
 public class Author implements Serializable {
 
     @Id

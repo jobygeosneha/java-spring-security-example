@@ -103,7 +103,7 @@ class BookRepoCustomImpl implements BookRepoCustom {
         }
         if (!criteriaList.isEmpty()) {
             Criteria authorCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
-            operations.add(lookup("author", "authorIds", "_id", "author"));
+            operations.add(lookup("authors", "authorIds", "_id", "author"));
             operations.add(unwind("author", false));
             operations.add(match(authorCriteria));
         }

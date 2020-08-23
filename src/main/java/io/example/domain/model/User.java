@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Document @Data
+@Document(collection = "users") @Data
 public class User implements UserDetails, Serializable {
 
     @Id
