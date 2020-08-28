@@ -34,7 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserRepo userRepo;
     private final JwtTokenFilter jwtTokenFilter;
 
-    public SecurityConfig(Logger logger, UserRepo userRepo, JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfig(Logger logger,
+                          UserRepo userRepo,
+                          JwtTokenFilter jwtTokenFilter) {
         this.logger = logger;
         this.userRepo = userRepo;
         this.jwtTokenFilter = jwtTokenFilter;
@@ -61,16 +63,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Enable CORS and disable CSRF
         http = http.cors().and().csrf().disable();
 
-        // Set unauthorized requests exception handler
-        http = http.exceptionHandling()
-                .authenticationEntryPoint((httpServletRequest, httpServletResponse, ex) -> {
-                    logger.error("Unauthorized request - {}", ex.getMessage());
-                    httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
-                })
+        // Set session management to stateless
+        http = http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and();
 
-        // Set session management to stateless
-        http = http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+        // Set unauthorized requests exception handler
+        http = http
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, ex) -> {
+                            logger.error("Unauthorized request - {}", ex.getMessage());
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+                        }
+                )
+                .and();
 
         // Set permissions on endpoints
         http.authorizeRequests()
