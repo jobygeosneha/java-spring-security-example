@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -23,7 +24,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepo userRepo;
 
-    public JwtTokenFilter(JwtTokenUtil jwtTokenUtil, UserRepo userRepo) {
+    public JwtTokenFilter(JwtTokenUtil jwtTokenUtil,
+                          UserRepo userRepo) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepo = userRepo;
     }
@@ -46,11 +48,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Get user credentials and set it on the spring security context
-        UserDetails userDetails = userRepo.findByUsername(jwtTokenUtil.getUsername(token)).orElse(null);
-        UsernamePasswordAuthenticationToken authentication
-                = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        // Get user identity and set it on the spring security context
+        UserDetails userDetails = userRepo
+                .findByUsername(jwtTokenUtil.getUsername(token))
+                .orElse(null);
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null,
+                userDetails == null ? List.of() : userDetails.getAuthorities()
+        );
+
+        authentication
+                .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
