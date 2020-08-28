@@ -58,7 +58,7 @@ public class AuthApi {
     }
 
     @PostMapping("register")
-    public UserView login(@RequestBody @Valid CreateUserRequest request) {
+    public UserView register(@RequestBody @Valid CreateUserRequest request) {
         return userService.create(request);
     }
 
