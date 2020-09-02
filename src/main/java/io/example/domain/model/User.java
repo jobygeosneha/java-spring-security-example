@@ -33,8 +33,6 @@ public class User implements UserDetails, Serializable {
     private String password;
     @Indexed
     private String fullName;
-    private Set<ObjectId> roles = new HashSet<>();
-    @Transient
     private Set<Role> authorities = new HashSet<>();
 
     public User() {

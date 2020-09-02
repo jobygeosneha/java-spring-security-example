@@ -6,6 +6,7 @@ import io.example.domain.dto.UpdateUserRequest;
 import io.example.domain.dto.UserView;
 import io.example.domain.mapper.UserEditMapper;
 import io.example.domain.mapper.UserViewMapper;
+import io.example.domain.model.Role;
 import io.example.domain.model.User;
 import io.example.repository.UserRepo;
 import org.bson.types.ObjectId;
@@ -18,10 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -48,6 +52,9 @@ public class UserService implements UserDetailsService {
         }
         if (!request.getPassword().equals(request.getRePassword())) {
             throw new ValidationException("Passwords don't match!");
+        }
+        if (request.getAuthorities() == null) {
+            request.setAuthorities(new HashSet<>());
         }
 
         User user = userEditMapper.create(request);

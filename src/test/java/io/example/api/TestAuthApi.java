@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestAuthApi extends IntegrationTestBase {
+public class TestAuthApi {
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;

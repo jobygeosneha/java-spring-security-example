@@ -19,7 +19,7 @@ public class MongoConfig {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = null;
-            if (authentication != null) {
+            if (authentication != null && authentication.getPrincipal() instanceof User) {
                 user = (User) authentication.getPrincipal();
             }
             return user == null ? Optional.empty() : Optional.of(user.getId());

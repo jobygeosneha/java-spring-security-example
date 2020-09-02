@@ -6,13 +6,12 @@ import io.example.api.data.UserTestDataFactory;
 import io.example.domain.dto.ListResponse;
 import io.example.domain.dto.SearchUsersRequest;
 import io.example.domain.dto.UserView;
-import io.example.domain.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -25,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestUserSearchApi extends IntegrationTestBase {
+public class TestUserSearchApi {
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
@@ -38,7 +37,7 @@ public class TestUserSearchApi extends IntegrationTestBase {
         this.userTestDataFactory = userTestDataFactory;
     }
 
-    @Test @WithMockUser(roles = {Role.USER_ADMIN})
+    @Test @WithUserDetails("ada.lovelace@nix.io")
     public void testSearch() throws Exception {
         UserView user1 = userTestDataFactory.createUser(String.format("william.baker.%d@gmail.com", currentTimeMillis()), "William Baker");
         UserView user2 = userTestDataFactory.createUser(String.format("james.adams.%d@gmail.com", currentTimeMillis()), "James Adams");

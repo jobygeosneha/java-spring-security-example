@@ -1,6 +1,7 @@
 package io.example;
 
 import io.example.domain.dto.CreateUserRequest;
+import io.example.domain.model.Role;
 import io.example.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class Application {
@@ -32,6 +34,11 @@ class DatabaseInitializer implements ApplicationListener<ApplicationReadyEvent> 
             "Alan Turing",
             "Dennis Ritchie"
     );
+    private final List<String> roles = List.of(
+            Role.USER_ADMIN,
+            Role.AUTHOR_ADMIN,
+            Role.BOOK_ADMIN
+    );
     private final String password = "Test12345_";
 
     private final UserService userService;
@@ -48,6 +55,7 @@ class DatabaseInitializer implements ApplicationListener<ApplicationReadyEvent> 
             request.setFullName(fullNames.get(i));
             request.setPassword(password);
             request.setRePassword(password);
+            request.setAuthorities(Set.of(roles.get(i)));
 
             userService.upsert(request);
         }

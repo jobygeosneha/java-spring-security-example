@@ -8,13 +8,12 @@ import io.example.domain.dto.AuthorView;
 import io.example.domain.dto.BookView;
 import io.example.domain.dto.ListResponse;
 import io.example.domain.dto.SearchAuthorsRequest;
-import io.example.domain.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -29,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestAuthorSearchApi extends IntegrationTestBase {
+public class TestAuthorSearchApi {
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
@@ -47,7 +46,7 @@ public class TestAuthorSearchApi extends IntegrationTestBase {
         this.bookTestDataFactory = bookTestDataFactory;
     }
 
-    @Test @WithMockUser(roles = {Role.AUTHOR_ADMIN})
+    @Test @WithUserDetails("alan.turing@nix.io")
     public void testSearch() throws Exception {
         AuthorView author1 = authorTestDataFactory.createAuthor("Author Search A Author", null, null, List.of("Author Search Genre A", "Author Search Genre B"));
         AuthorView author2 = authorTestDataFactory.createAuthor("Author Search B Author");
