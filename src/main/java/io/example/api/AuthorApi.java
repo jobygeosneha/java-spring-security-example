@@ -24,7 +24,6 @@ import javax.validation.Valid;
 
 @Api(tags = "Author")
 @RestController @RequestMapping(path = "api/author")
-@RolesAllowed(Role.AUTHOR_ADMIN)
 public class AuthorApi {
 
     private final AuthorService authorService;
@@ -36,17 +35,17 @@ public class AuthorApi {
         this.bookService = bookService;
     }
 
-    @PostMapping
+    @PostMapping @RolesAllowed(Role.AUTHOR_ADMIN)
     public AuthorView create(@RequestBody @Valid EditAuthorRequest request) {
         return authorService.create(request);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("{id}") @RolesAllowed(Role.AUTHOR_ADMIN)
     public AuthorView edit(@PathVariable String id, @RequestBody @Valid EditAuthorRequest request) {
         return authorService.update(new ObjectId(id), request);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("{id}") @RolesAllowed(Role.AUTHOR_ADMIN)
     public AuthorView delete(@PathVariable String id) {
         return authorService.delete(new ObjectId(id));
     }

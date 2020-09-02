@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithUserDetails("ada.lovelace@nix.io")
 public class TestUserAdminApi {
 
     private final MockMvc mockMvc;
@@ -45,7 +46,7 @@ public class TestUserAdminApi {
         this.userTestDataFactory = userTestDataFactory;
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testCreateSuccess() throws Exception {
         CreateUserRequest goodRequest = new CreateUserRequest();
         goodRequest.setUsername(String.format("test.user.%d@nix.com", currentTimeMillis()));
@@ -65,7 +66,7 @@ public class TestUserAdminApi {
         assertEquals(goodRequest.getFullName(), userView.getFullName(), "User fullname  update isn't applied!");
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testCreateFail() throws Exception {
         CreateUserRequest badRequest = new CreateUserRequest();
         badRequest.setUsername("invalid.username");
@@ -78,7 +79,7 @@ public class TestUserAdminApi {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testCreateUsernameExists() throws Exception {
         UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -96,7 +97,7 @@ public class TestUserAdminApi {
                 .andExpect(content().string(containsString("Username exists")));
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testCreatePasswordsMismatch() throws Exception {
         CreateUserRequest badRequest = new CreateUserRequest();
         badRequest.setUsername(String.format("test.user.%d@nix.com", currentTimeMillis()));
@@ -112,7 +113,7 @@ public class TestUserAdminApi {
                 .andExpect(content().string(containsString("Passwords don't match")));
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testEditSuccess() throws Exception {
         UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -130,7 +131,7 @@ public class TestUserAdminApi {
         assertEquals(updateRequest.getFullName(), newUserView.getFullName(), "User fullname update isn't applied!");
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testEditFailBadRequest() throws Exception {
         UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -144,7 +145,7 @@ public class TestUserAdminApi {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testEditFailNotFound() throws Exception {
         UpdateUserRequest updateRequest = new UpdateUserRequest();
         updateRequest.setFullName("Test User B");
@@ -157,7 +158,7 @@ public class TestUserAdminApi {
                 .andExpect(content().string(containsString("Entity User with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testDeleteSuccess() throws Exception {
         UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -170,7 +171,7 @@ public class TestUserAdminApi {
                 .andExpect(status().isNotFound());
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testDeleteFailNotFound() throws Exception {
         this.mockMvc
                 .perform(delete(String.format("/api/admin/user/%s", "5f07c259ffb98843e36a2aa9")))
@@ -178,7 +179,7 @@ public class TestUserAdminApi {
                 .andExpect(content().string(containsString("Entity User with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testDeleteAndCreateAgain() throws Exception {
         UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -208,7 +209,7 @@ public class TestUserAdminApi {
         assertEquals(userView.getUsername(), newUserView.getUsername(), "User names must match!");
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testGetSuccess() throws Exception {
         UserView userView = userTestDataFactory.createUser(String.format("test.user.%d@nix.io", currentTimeMillis()), "Test User A");
 
@@ -222,7 +223,7 @@ public class TestUserAdminApi {
         assertEquals(userView.getId(), newUserView.getId(), "User ids must be equal!");
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testGetNotFound() throws Exception {
         this.mockMvc
                 .perform(get(String.format("/api/admin/user/%s", "5f07c259ffb98843e36a2aa9")))

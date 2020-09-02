@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithUserDetails("alan.turing@nix.io")
 public class TestAuthorApi {
 
     private final MockMvc mockMvc;
@@ -51,7 +53,7 @@ public class TestAuthorApi {
         this.bookTestDataFactory = bookTestDataFactory;
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test
     public void testCreateSuccess() throws Exception {
         EditAuthorRequest goodRequest = new EditAuthorRequest();
         goodRequest.setFullName("Test Author A");
@@ -68,7 +70,7 @@ public class TestAuthorApi {
         assertEquals(goodRequest.getFullName(), authorView.getFullName(), "Author name update isn't applied!");
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test
     public void testCreateFail() throws Exception {
         EditAuthorRequest badRequest = new EditAuthorRequest();
 
@@ -80,7 +82,7 @@ public class TestAuthorApi {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test
     public void testEditSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
@@ -100,7 +102,7 @@ public class TestAuthorApi {
         assertEquals(updateRequest.getAbout(), newAuthorView.getAbout(), "Author name update isn't applied!");
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test
     public void testEditFailBadRequest() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
@@ -114,7 +116,7 @@ public class TestAuthorApi {
                 .andExpect(content().string(containsString("Method argument validation failed")));
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test
     public void testEditFailNotFound() throws Exception {
         EditAuthorRequest updateRequest = new EditAuthorRequest();
         updateRequest.setFullName("Test Author B");
@@ -127,7 +129,7 @@ public class TestAuthorApi {
                 .andExpect(content().string(containsString("Entity Author with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test
     public void testDeleteSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
@@ -140,7 +142,7 @@ public class TestAuthorApi {
                 .andExpect(status().isNotFound());
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test
     public void testDeleteFailNotFound() throws Exception {
         this.mockMvc
                 .perform(delete(String.format("/api/author/%s", "5f07c259ffb98843e36a2aa9")))
@@ -148,7 +150,7 @@ public class TestAuthorApi {
                 .andExpect(content().string(containsString("Entity Author with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test @WithAnonymousUser
     public void testGetSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
 
@@ -162,7 +164,7 @@ public class TestAuthorApi {
         assertEquals(authorView.getId(), newAuthorView.getId(), "Author ids must be equal!");
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test @WithAnonymousUser
     public void testGetNotFound() throws Exception {
         this.mockMvc
                 .perform(get(String.format("/api/author/%s", "5f07c259ffb98843e36a2aa9")))
@@ -170,7 +172,7 @@ public class TestAuthorApi {
                 .andExpect(content().string(containsString("Entity Author with id 5f07c259ffb98843e36a2aa9 not found")));
     }
 
-    @Test @WithUserDetails("alan.turing@nix.io")
+    @Test @WithAnonymousUser
     public void testGetAuthorBooksSuccess() throws Exception {
         AuthorView authorView = authorTestDataFactory.createAuthor("Test Author A");
         BookView bookView1 = bookTestDataFactory.createBook(List.of(authorView.getId()), "Test Book A");

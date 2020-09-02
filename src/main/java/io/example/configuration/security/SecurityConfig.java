@@ -3,6 +3,7 @@ package io.example.configuration.security;
 import io.example.repository.UserRepo;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -91,6 +92,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html").permitAll()
                 // Our public endpoints
                 .antMatchers("/api/public/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/author/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/author/search").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/book/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/book/search").permitAll()
                 // Our private endpoints
                 .anyRequest().authenticated();
 

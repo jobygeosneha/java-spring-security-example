@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -47,7 +46,7 @@ public class TestBookSearchApi {
         this.bookTestDataFactory = bookTestDataFactory;
     }
 
-    @Test @WithUserDetails("dennis.ritchie@nix.io")
+    @Test
     public void testSearch() throws Exception {
         AuthorView author1 = authorTestDataFactory.createAuthor("Book Search A Author");
         AuthorView author2 = authorTestDataFactory.createAuthor("Book Search B Author");

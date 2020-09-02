@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithUserDetails("ada.lovelace@nix.io")
 public class TestUserSearchApi {
 
     private final MockMvc mockMvc;
@@ -37,7 +38,7 @@ public class TestUserSearchApi {
         this.userTestDataFactory = userTestDataFactory;
     }
 
-    @Test @WithUserDetails("ada.lovelace@nix.io")
+    @Test
     public void testSearch() throws Exception {
         UserView user1 = userTestDataFactory.createUser(String.format("william.baker.%d@gmail.com", currentTimeMillis()), "William Baker");
         UserView user2 = userTestDataFactory.createUser(String.format("james.adams.%d@gmail.com", currentTimeMillis()), "James Adams");
