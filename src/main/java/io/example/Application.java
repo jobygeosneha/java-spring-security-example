@@ -35,9 +35,9 @@ class DatabaseInitializer implements ApplicationListener<ApplicationReadyEvent> 
             "Dennis Ritchie"
     );
     private final List<String> roles = List.of(
-            Role.USER_ADMIN,
-            Role.AUTHOR_ADMIN,
-            Role.BOOK_ADMIN
+            Role.ROLE_USER_ADMIN,
+            Role.ROLE_AUTHOR_ADMIN,
+            Role.ROLE_BOOK_ADMIN
     );
     private final String password = "Test12345_";
 
