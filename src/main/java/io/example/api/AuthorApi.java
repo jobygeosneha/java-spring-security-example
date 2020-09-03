@@ -35,17 +35,20 @@ public class AuthorApi {
         this.bookService = bookService;
     }
 
-    @PostMapping @RolesAllowed(Role.AUTHOR_ADMIN)
+    @RolesAllowed(Role.AUTHOR_ADMIN)
+    @PostMapping
     public AuthorView create(@RequestBody @Valid EditAuthorRequest request) {
         return authorService.create(request);
     }
 
-    @PutMapping("{id}") @RolesAllowed(Role.AUTHOR_ADMIN)
+    @RolesAllowed(Role.AUTHOR_ADMIN)
+    @PutMapping("{id}")
     public AuthorView edit(@PathVariable String id, @RequestBody @Valid EditAuthorRequest request) {
         return authorService.update(new ObjectId(id), request);
     }
 
-    @DeleteMapping("{id}") @RolesAllowed(Role.AUTHOR_ADMIN)
+    @RolesAllowed(Role.AUTHOR_ADMIN)
+    @DeleteMapping("{id}")
     public AuthorView delete(@PathVariable String id) {
         return authorService.delete(new ObjectId(id));
     }
