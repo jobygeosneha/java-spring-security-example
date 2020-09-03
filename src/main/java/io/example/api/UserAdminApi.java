@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @Api(tags = "UserAdmin")
 @RestController @RequestMapping(path = "api/admin/user")
-@RolesAllowed(Role.ROLE_USER_ADMIN)
+@RolesAllowed(Role.USER_ADMIN)
 public class UserAdminApi {
 
     private final UserService userService;
