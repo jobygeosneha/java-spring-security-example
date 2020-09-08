@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ));
     }
 
+    // Set password encoding schema
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
